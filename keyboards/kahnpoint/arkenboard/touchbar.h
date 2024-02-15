@@ -25,7 +25,13 @@ uint8_t* readAllPins(void);
 
 //#define SPLIT_TRANSACTION_IDS_KB 0x10
 //#define SPLIT_TRANSACTION_IDS_USER 0x10
-#define READ_ALL_PINS_TRANSACTION_ID 0x10
+#define READ_ALL_PINS_TRANSACTION_ID 0x37
+
+
+typedef struct _read_all_pins_result_t {
+    uint8_t results[NUM_PINS];
+} read_all_pins_result_t;
+
 
 // Slave-side handler function for readAllPins transaction
 void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data);

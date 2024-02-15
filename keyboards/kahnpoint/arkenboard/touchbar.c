@@ -7,9 +7,6 @@
 
 const uint8_t capTouchPins[numSensors] = { 0, 1, 2, 3, 5, 7};
 
-
-
-
 i2c_status_t writeByte1(uint8_t b1){
     uint8_t data[] = {b1};
    i2c_start( TOUCHBAR_ADDRESS);
@@ -82,7 +79,7 @@ uint8_t* readAllPins(void) {
     }
     return results;
 }
-
+/*
 // Slave-side handler function for readAllPins transaction
 void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
     // Call readAllPins function
@@ -90,8 +87,30 @@ void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_b
     // Copy the results to the out_data buffer
     memcpy(out_data, results, NUM_PINS);
 }
+*/
 
 // enum custom_transaction_ids {
 //     READ_ALL_PINS_TRANSACTION_ID = 0x10,
 //     // Add more transaction IDs here if needed
 // };
+
+
+/*
+void charybdis_config_sync_handler(uint8_t initiator2target_buffer_size, const void* initiator2target_buffer, uint8_t target2initiator_buffer_size, void* target2initiator_buffer) {
+    if (initiator2target_buffer_size == sizeof(g_charybdis_config)) {
+        memcpy(&g_charybdis_config, initiator2target_buffer, sizeof(g_charybdis_config));
+    }
+}
+
+*/
+
+void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
+    // Call readAllPins function
+    uint8_t* pin_results = readAllPins();
+    // Cast out_data to read_all_pins_result_t*
+    read_all_pins_result_t* result_data = (read_all_pins_result_t*)out_data;
+    // Copy the results to the result_data->results array
+    for(uint8_t i = 0; i < NUM_PINS; i++) {
+        result_data->results[i] = pin_results[i];
+    }
+}

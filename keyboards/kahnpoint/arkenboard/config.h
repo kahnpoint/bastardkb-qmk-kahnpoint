@@ -45,8 +45,8 @@
 #    define RGB_MATRIX_DEFAULT_VAL 64
 
 // Rainbow swirl as startup mode.
-#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-#    define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_LEFT_RIGHT
+//#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
+    #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_COLOR
 
 // Slow swirl at startup.
 #    define RGB_MATRIX_DEFAULT_SPD 32

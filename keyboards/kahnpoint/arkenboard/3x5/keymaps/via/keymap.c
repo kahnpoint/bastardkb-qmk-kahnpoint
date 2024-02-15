@@ -315,32 +315,33 @@ int16_t CapTouchWireling::getPosition(int range) {
 uint8_t masterTouched[NUM_PINS]={0,0,0,0,0,0};
 uint8_t slaveTouched[NUM_PINS]={0,0,0,0,0,0};
 
-void matrix_scan_user(void) {
+void matrix_scan_user(void) {}
+
+void housekeeping_task_user(void) {
 //rgb_matrix_sethsv_noeeprom(HSV_GREEN);
 
-//if any key is pressed, turn the light blue
+//if any key is pressed, turn the lighs off
 if (any_key_pressed()) {
     rgb_matrix_sethsv_noeeprom(HSV_BLACK);
 }else{
 
-  if (IS_KEYBOARD_MASTER) {
+    if (IS_KEYBOARD_MASTER) {
 
-        uint8_t* pins = readAllPins();
-        memcpy(masterTouched, pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
+            uint8_t* pins = readAllPins();
+            memcpy(masterTouched, pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
 
-
-        static uint32_t last_sync = 0;
-        if (timer_elapsed32(last_sync) > 20) {
-            uint8_t results[NUM_PINS];
-            //slave_to_master_t s2m;
-            if(transaction_rpc_exec(READ_ALL_PINS_TRANSACTION_ID, 0, NULL, NUM_PINS, results)) {
-                last_sync = timer_read32();
-                // Assign received results to rpcTouched
-                memcpy(slaveTouched, results, NUM_PINS);
-            } else {
-                dprint("Read all pins failed!\n");
+            static uint32_t last_sync = 0;
+            if (timer_elapsed32(last_sync) > 20) {
+                read_all_pins_result_t results;
+                if(transaction_rpc_exec(READ_ALL_PINS_TRANSACTION_ID, 0, NULL, sizeof(results), &results)) {
+                    last_sync = timer_read32();
+                    // Assign received results to rpcTouched
+                    memcpy(slaveTouched, results.results, NUM_PINS);
+                } else {
+                    dprint("Read all pins failed!\n");
+                }
             }
-        }
+
         }
     }
 
@@ -349,7 +350,7 @@ if (any_key_pressed()) {
 
 if(IS_KEYBOARD_MASTER){
 
-
+//rgb_matrix_sethsv_noeeprom(HSV_WHITE);
 
 
 //left shift;
@@ -407,7 +408,7 @@ layer_off(5);
 register_code(KC_LGUI);
 
 }else{
-    rgb_matrix_sethsv_noeeprom(HSV_WHITE);
+    //rgb_matrix_sethsv_noeeprom(HSV_WHITE);
 unregister_code(KC_LSFT);
 layer_off(1);
 layer_off(3);
@@ -466,7 +467,7 @@ layer_off(4);
 layer_off(6);
 register_code(KC_LALT);
 }else{
-    rgb_matrix_sethsv_noeeprom(HSV_WHITE);
+   // rgb_matrix_sethsv_noeeprom(HSV_WHITE);
 unregister_code(KC_LCTL);
 layer_off(2);
 layer_off(4);

@@ -22,9 +22,9 @@
 //#include "touchbar.h"
 
 // Enable syncing of charybdis config
-#ifdef CHARYBDIS_CONFIG_SYNC
+//#ifdef CHARYBDIS_CONFIG_SYNC
 #    define SPLIT_TRANSACTION_IDS_KB RPC_ID_KB_CONFIG_SYNC, READ_ALL_PINS_TRANSACTION_ID
-#endif
+//#endif
 
 /* Mouse config. */
 

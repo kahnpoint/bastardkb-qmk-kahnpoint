@@ -20,7 +20,6 @@
 #include "arkenboard.h"
 #include <quantum/split_common/transactions.h>
 #include <string.h>
-//#include "i2c_master.h"
 #include <platforms/chibios/drivers/i2c_master.h>
 #include "touchbar.h"
 #include <hal.h>
@@ -369,6 +368,10 @@ void keyboard_post_init_kb(void) {
     transaction_register_rpc(RPC_ID_KB_CONFIG_SYNC, charybdis_config_sync_handler);
 #    endif
 
+// }
+
+// void matrix_init_user(void){
+
 IS_KEYBOARD_MASTER=is_keyboard_master();
 
 //register the transaction handler for the readAllPins transaction
@@ -379,7 +382,10 @@ transaction_register_rpc(READ_ALL_PINS_TRANSACTION_ID, read_all_pins_handler);
 i2c_init();
     //i2c_init(&i2c1Driver, I2C1_SCL_PIN, I2C1_SDA_PIN);
 
-    rgblight_sethsv_noeeprom(0,255,255); // Sets the color to red
+rgblight_enable_noeeprom();
+    rgb_matrix_sethsv_noeeprom(HSV_RED); // Sets the color to red
+
+if(!is_keyboard_master()){
 
     writeByte2(COMMAND_SET_MODE,MODE_REGISTER_DEC);
     uint8_t data=readByte(FIRMWARE_REVISION_REG);
@@ -393,6 +399,7 @@ i2c_init();
     }else{
     rgb_matrix_sethsv_noeeprom(HSV_RED);
     }
+}
 
 
     writeByte2(T841_ADCSRA, _BV(T841_ADEN) | 4 | 1);
