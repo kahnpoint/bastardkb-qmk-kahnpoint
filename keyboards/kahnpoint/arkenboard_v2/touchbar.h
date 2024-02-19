@@ -9,10 +9,9 @@
 #define DEFAULT_TIMEOUT 100
 
 extern const uint8_t capTouchPins[numSensors];
-
+extern bool IS_KEYBOARD_MASTER;
 extern uint8_t localHalfTouched[6];
 extern uint8_t remoteHalfTouched[6];
-extern bool IS_KEYBOARD_MASTER;
 
 i2c_status_t writeByte1(uint8_t b1);
 i2c_status_t writeByte2(uint8_t b1, uint8_t b2);

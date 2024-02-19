@@ -19,11 +19,12 @@
  */
 
 #pragma once
+//#include "touchbar.h"
 
 // Enable syncing of charybdis config
-// #ifdef CHARYBDIS_CONFIG_SYNC
-// #    define SPLIT_TRANSACTION_IDS_KB RPC_ID_KB_CONFIG_SYNC
-// #endif
+//#ifdef CHARYBDIS_CONFIG_SYNC
+//#define RPC_ID_KB_CONFIG_SYNC 0x10
+//#endif
 
 /* Mouse config. */
 

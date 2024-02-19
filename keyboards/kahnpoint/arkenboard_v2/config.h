@@ -21,13 +21,15 @@
 #define CHARYBDIS_CONFIG_SYNC
 #define SPLIT_TRANSACTION_IDS_KB RPC_ID_KB_CONFIG_SYNC,RPC_ID_READ_ALL_PINS,RPC_ID_SEND_ALL_PINS
 
+
 /* Pointing device configuration. */
 
 // Enable use of pointing device on slave split.
 #define SPLIT_POINTING_ENABLE
 
 // Pointing device is on the right split.
-#define POINTING_DEVICE_RIGHT
+//#define POINTING_DEVICE_RIGHT
+#define POINTING_DEVICE_COMBINED
 
 // Limits the frequency that the sensor is polled for motion.
 #define POINTING_DEVICE_TASK_THROTTLE_MS 1
@@ -35,22 +37,29 @@
 // Invert X axis on mouse reports.
 #define POINTING_DEVICE_INVERT_X
 
-/* RGB matrix support. */
-#ifdef RGB_MATRIX_ENABLE
 #    define SPLIT_TRANSPORT_MIRROR
 #    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
 #    define RGB_DISABLE_WHEN_USB_SUSPENDED
 #    define RGB_MATRIX_KEYPRESSES
+#    define SPLIT_LAYER_STATE_ENABLE
+
+/* RGB matrix support. */
+#ifdef RGB_MATRIX_ENABLE
+// #    define SPLIT_TRANSPORT_MIRROR
+// #    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
+// #    define RGB_DISABLE_WHEN_USB_SUSPENDED
+// #    define RGB_MATRIX_KEYPRESSES
 
 // Startup values.
 #    define RGB_MATRIX_DEFAULT_VAL 64
 
 // Rainbow swirl as startup mode.
-#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-#    define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_LEFT_RIGHT
+//#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
+    #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_COLOR
 
 // Slow swirl at startup.
-#    define RGB_MATRIX_DEFAULT_SPD 32
+//#    define RGB_MATRIX_DEFAULT_SPD 32
+
 
 #    ifndef __arm__
 // Disable control of RGB matrix by keycodes (must use firmware implementation
@@ -101,3 +110,4 @@
 #        define ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
 #    endif // !__arm__
 #endif
+

@@ -7,7 +7,6 @@
 
 const uint8_t capTouchPins[numSensors] = { 0, 1, 2, 3, 5, 7};
 
-
 i2c_status_t writeByte1(uint8_t b1){
     uint8_t data[] = {b1};
    i2c_start( TOUCHBAR_ADDRESS);

@@ -18,22 +18,22 @@
  */
 
 #include "arkenboard.h"
-//#include "transactions.h"
+//#include "quantum"
 #include <quantum/split_common/transactions.h>
-#include <platforms/chibios/drivers/i2c_master.h>
+#include <quantum/color.h>
+#include <quantum/rgblight/rgblight.h>
 #include <string.h>
-#include <arkenboard/touchbar.h>
-
-
-uint8_t localHalfTouched[6] = {0};
-uint8_t remoteHalfTouched[6]  = {0};
-bool IS_KEYBOARD_MASTER;
+#include <platforms/chibios/drivers/i2c_master.h>
+#include "touchbar.h"
+#include <hal.h>
 
 #ifdef CONSOLE_ENABLE
 #    include "print.h"
 #endif // CONSOLE_ENABLE
 
-#ifdef POINTING_DEVICE_ENABLE
+bool IS_KEYBOARD_MASTER;
+
+//#ifdef POINTING_DEVICE_ENABLE
 #    ifndef CHARYBDIS_MINIMUM_DEFAULT_DPI
 #        define CHARYBDIS_MINIMUM_DEFAULT_DPI 400
 #    endif // CHARYBDIS_MINIMUM_DEFAULT_DPI
@@ -224,7 +224,7 @@ report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
     return mouse_report;
 }
 
-#    if defined(POINTING_DEVICE_ENABLE) && !defined(NO_CHARYBDIS_KEYCODES)
+//#    if defined(POINTING_DEVICE_ENABLE) && !defined(NO_CHARYBDIS_KEYCODES)
 /** \brief Whether SHIFT mod is enabled. */
 static bool has_shift_mod(void) {
 #        ifdef NO_ACTION_ONESHOT
@@ -233,7 +233,7 @@ static bool has_shift_mod(void) {
     return mod_config(get_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT;
 #        endif // NO_ACTION_ONESHOT
 }
-#    endif // POINTING_DEVICE_ENABLE && !NO_CHARYBDIS_KEYCODES
+//#    endif // POINTING_DEVICE_ENABLE && !NO_CHARYBDIS_KEYCODES
 
 /**
  * \brief Outputs the Charybdis configuration to console.
@@ -266,7 +266,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
         debug_charybdis_config_to_console(&g_charybdis_config);
         return false;
     }
-#    ifdef POINTING_DEVICE_ENABLE
+//#    ifdef POINTING_DEVICE_ENABLE
 #        ifndef NO_CHARYBDIS_KEYCODES
     switch (keycode) {
         case POINTER_DEFAULT_DPI_FORWARD:
@@ -311,7 +311,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
             break;
     }
 #        endif // !NO_CHARYBDIS_KEYCODES
-#    endif     // POINTING_DEVICE_ENABLE
+//#    endif     // POINTING_DEVICE_ENABLE
     if (IS_QK_KB(keycode) || IS_MOUSEKEY(keycode)) {
         debug_charybdis_config_to_console(&g_charybdis_config);
     }
@@ -319,7 +319,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
 }
 
 void eeconfig_init_kb(void) {
-    IS_KEYBOARD_MASTER = is_keyboard_master();
     g_charybdis_config.raw = 0;
     write_charybdis_config_to_eeprom(&g_charybdis_config);
     maybe_update_pointing_device_cpi(&g_charybdis_config);
@@ -328,55 +327,51 @@ void eeconfig_init_kb(void) {
 
 void matrix_init_kb(void) {
     read_charybdis_config_from_eeprom(&g_charybdis_config);
+    IS_KEYBOARD_MASTER=is_keyboard_master();
     matrix_init_user();
 }
 
-#    ifdef CHARYBDIS_CONFIG_SYNC
+
+//#    ifdef CHARYBDIS_CONFIG_SYNC
 void charybdis_config_sync_handler(uint8_t initiator2target_buffer_size, const void* initiator2target_buffer, uint8_t target2initiator_buffer_size, void* target2initiator_buffer) {
     if (initiator2target_buffer_size == sizeof(g_charybdis_config)) {
         memcpy(&g_charybdis_config, initiator2target_buffer, sizeof(g_charybdis_config));
     }
 }
-#    endif
+//#    endif
+
+
 /*
-void keyboard_post_init_kb(void) {
-    maybe_update_pointing_device_cpi(&g_charybdis_config);
-#    ifdef CHARYBDIS_CONFIG_SYNC
-    transaction_register_rpc(RPC_ID_KB_CONFIG_SYNC, charybdis_config_sync_handler);
-#    endif
-    keyboard_post_init_user();
+void i2c_init_custom(void)
+{
+  palSetGroupMode(GPIOB, GPIOB_PIN6 | GPIOB_PIN7, 0, PAL_MODE_INPUT); // Try releasing special pins for a short time
+  chThdSleepMilliseconds(10);
+
+  palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN | PAL_STM32_PUPDR_PULLUP);
+  palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN | PAL_STM32_PUPDR_PULLUP);
+
+  //i2cInit(); //This is invoked by halInit() so no need to redo it.
 }
-
-#    ifdef CHARYBDIS_CONFIG_SYNC
-void housekeeping_task_kb(void) {
-    if (is_keyboard_master()) {
-        // Keep track of the last state, so that we can tell if we need to propagate to slave.
-        static charybdis_config_t last_charybdis_config = {0};
-        static uint32_t           last_sync             = 0;
-        bool                      needs_sync            = false;
-
-        // Check if the state values are different.
-        if (memcmp(&g_charybdis_config, &last_charybdis_config, sizeof(g_charybdis_config))) {
-            needs_sync = true;
-            memcpy(&last_charybdis_config, &g_charybdis_config, sizeof(g_charybdis_config));
-        }
-        // Send to slave every 500ms regardless of state change.
-        if (timer_elapsed32(last_sync) > 500) {
-            needs_sync = true;
-        }
-
-        // Perform the sync if requested.
-        if (needs_sync) {
-            if (transaction_rpc_send(RPC_ID_KB_CONFIG_SYNC, sizeof(g_charybdis_config), &g_charybdis_config)) {
-                last_sync = timer_read32();
-            }
-        }
-    }
-    // No need to invoke the user-specific callback, as it's been called
-    // already.
-}
-#    endif // CHARYBDIS_CONFIG_SYNC
 */
+/*
+//use I2C1 and pins I2C1_SDA_PIN and I2C1_SCL_PIN;
+void i2c_init_custom(void) {
+palSetGroupMode(GPIOB,I2C1_SDA_PIN | I2C1_SCL_PIN, 0, PAL_MODE_INPUT); // Try releasing special pins for a short time
+
+chThdSleepMilliseconds(10);
+
+palSetPadMode(GPIOB, I2C1_SDA_PIN, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN | PAL_STM32_PUPDR_PULLUP);
+
+palSetPadMode(GPIOB, I2C1_SCL_PIN, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN | PAL_STM32_PUPDR_PULLUP);
+
+
+}
+*/
+
+
+void matrix_init_user(void){
+
+}
 
 void keyboard_post_init_kb(void) {
     maybe_update_pointing_device_cpi(&g_charybdis_config);
@@ -509,7 +504,6 @@ void housekeeping_task_kb(void) {
 }
 //#    endif // CHARYBDIS_CONFIG_SYNC
 //#endif     // POINTING_DEVICE_ENABLE
-#endif     // POINTING_DEVICE_ENABLE
 
 #if defined(KEYBOARD_bastardkb_charybdis_3x5_blackpill) || defined(KEYBOARD_bastardkb_charybdis_4x6_blackpill)
 void keyboard_pre_init_kb(void) {

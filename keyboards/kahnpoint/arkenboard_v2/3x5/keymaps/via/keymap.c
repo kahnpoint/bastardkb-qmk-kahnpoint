@@ -15,20 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-//#include "quantum.h"
+#include "quantum.h"
 #include <quantum/split_common/transactions.h>
-#include <arkenboard/touchbar.h>
+#include "touchbar.h"
 #include <string.h>
-
-bool any_key_pressed(void) {
-    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-        matrix_row_t row_state = matrix_get_row(row);
-        if (row_state) { // if any key in this row is pressed
-            return true;
-        }
-    }
-    return false;
-}
 
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #    include "timer.h"
@@ -90,7 +80,7 @@ static uint16_t auto_pointer_layer_timer = 0;
  * Layers used on the Charybdis Nano.
  *
  * These layers started off heavily inspired by the Miryoku layout, but trimmed
- * down and tailored for a stock experience that is meant to be fundation for
+ * down and tailored for a stock experience that is meant to be foundation for
  * further personalization.
  *
  * See https://github.com/manna-harbour/miryoku for the original layout.
@@ -228,48 +218,102 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_SYMBOLS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS),
 };
 // clang-format on
-
-#ifdef POINTING_DEVICE_ENABLE
-#    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
+/*
+//#ifdef POINTING_DEVICE_ENABLE
+//#    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     if (abs(mouse_report.x) > CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD || abs(mouse_report.y) > CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD) {
         if (auto_pointer_layer_timer == 0) {
             layer_on(LAYER_POINTER);
 #        ifdef RGB_MATRIX_ENABLE
             rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+            rgblight_sethsv_noeeprom(HSV_GREEN);
 #        endif // RGB_MATRIX_ENABLE
         }
         auto_pointer_layer_timer = timer_read();
     }
     return mouse_report;
 }
+*/
 
-void matrix_scan_user(void) {
-    if (auto_pointer_layer_timer != 0 && TIMER_DIFF_16(timer_read(), auto_pointer_layer_timer) >= CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS) {
-        auto_pointer_layer_timer = 0;
-        layer_off(LAYER_POINTER);
-#        ifdef RGB_MATRIX_ENABLE
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_DEFAULT_MODE);
-#        endif // RGB_MATRIX_ENABLE
+bool any_key_pressed(void) {
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        matrix_row_t row_state = matrix_get_row(row);
+        if (row_state) { // if any key in this row is pressed
+            return true;
+        }
     }
+    return false;
 }
-#    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
+/*
+uint16_t CapTouchWireling::capTouchRead(uint8_t pin) {
 
-#    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
-layer_state_t layer_state_set_user(layer_state_t state) {
-    charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
-    return state;
+  writeByte(COMMAND_CAP_TOUCH, capTouchPins[pin], 5);
+  delay(1);
+  writeByte(COMMAND_SET_MODE, MODE_REGISTER_DEC);
+  int value = read(RETURN_VAL_REG_0);
+  value += (int)read(RETURN_VAL_REG_1)<<8;
+  writeByte(COMMAND_SET_MODE, MODE_COMMAND);
+  return value;
 }
-#    endif // CHARYBDIS_AUTO_SNIPING_ON_LAYER
-#endif     // POINTING_DEVICE_ENABLE
+*/
 
-#ifdef RGB_MATRIX_ENABLE
-// Forward-declare this helper function since it is defined in
-// rgb_matrix.c.
-void rgb_matrix_update_pwm_buffers(void);
-#endif
 
+
+/*
+uint16_t capTouchRead(uint8_t pin) {
+
+    i2c_start( TOUCHBAR_ADDRESS);
+
+    uint8_t data[3] = {COMMAND_SET_MODE, MODE_COMMAND,0};
+    i2c_transmit( TOUCHBAR_ADDRESS, data, 2, DEFAULT_TIMEOUT);
+
+    data[0] = COMMAND_CAP_TOUCH;
+    data[1] = capTouchPins[pin];
+    data[2] = 1;
+    i2c_transmit( TOUCHBAR_ADDRESS, data, 3, DEFAULT_TIMEOUT);
+
+    data[0] = COMMAND_SET_MODE;
+    data[1] = MODE_REGISTER_DEC;
+    i2c_transmit( TOUCHBAR_ADDRESS, data, 2, DEFAULT_TIMEOUT);
+
+    data[0] = RETURN_VAL_REG_0;
+    i2c_transmit( TOUCHBAR_ADDRESS, data, 1, DEFAULT_TIMEOUT);
+
+    uint16_t value = 0;
+
+    uint8_t value0=0;
+    i2c_receive( TOUCHBAR_ADDRESS, &value0, 1, DEFAULT_TIMEOUT);
+
+    uint8_t value1=0;
+    i2c_receive( TOUCHBAR_ADDRESS, &value1, 1, DEFAULT_TIMEOUT);
+
+    value = (value0 + ((uint16_t)value1 << 8));
+
+    i2c_stop();
+
+    return value;
+}
+*/
+
+
+
+/*
+int16_t CapTouchWireling::getPosition(int range) {
+  float position = primary;
+  if (primary < numSensors-1)
+    position += (pow((float)capTouchCurrent[primary + 1] / (float)getMaxReading(),0.45)) / 2.0;
+  if (primary > 0)
+    position -= (pow((float)capTouchCurrent[primary - 1] / (float)getMaxReading(),0.45)) / 2.0;
+
+  position = position * (float)range / float(numSensors-1);
+  return position;
+}
+
+*/
+
+
+void matrix_scan_user(void) {}
 
 void housekeeping_task_user(void) {
 //rgblight_sethsv_noeeprom(HSV_GREEN);
@@ -410,3 +454,23 @@ unregister_code(KC_LALT);
 }
 }
 
+
+
+
+//#    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
+//
+/*
+#    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
+layer_state_t layer_state_set_user(layer_state_t state) {
+    charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
+    return state;
+}
+#    endif // CHARYBDIS_AUTO_SNIPING_ON_LAYER
+//#endif     // POINTING_DEVICE_ENABLE
+*/
+
+#ifdef RGB_MATRIX_ENABLE
+// Forward-declare this helper function since it is defined in
+// rgb_matrix.c.
+void rgb_matrix_update_pwm_buffers(void);
+#endif
