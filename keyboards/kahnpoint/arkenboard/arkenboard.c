@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include QMK_KEYBOARD_H
+//#include <quantum>
 #include "arkenboard.h"
 //#include "transactions.h"
 #include <quantum/split_common/transactions.h>
 #include <platforms/chibios/drivers/i2c_master.h>
 #include <string.h>
 #include <arkenboard/touchbar.h>
+#include <hal.h>
+//#include <platforms/chibios/drivers/uart.c>
 
 
 uint8_t localHalfTouched[6] = {0};

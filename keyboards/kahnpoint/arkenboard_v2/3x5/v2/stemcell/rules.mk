@@ -1,8 +1,11 @@
+CONVERT_TO = stemcell
+STMC_US = yes
+
 # Build Options
 #   change yes to no to disable
 #
 BOOTMAGIC_ENABLE = yes      # Enable Bootmagic Lite
-MOUSEKEY_ENABLE = no        # Mouse keys
+MOUSEKEY_ENABLE = yes       # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 CONSOLE_ENABLE = no         # Console for debug
 COMMAND_ENABLE = no         # Commands for debug and configuration
@@ -20,10 +23,7 @@ SPLIT_KEYBOARD = yes
 
 POINTING_DEVICE_ENABLE = yes # Enable trackball
 POINTING_DEVICE_DRIVER = pmw3360
+MOUSE_SHARED_EP = no # Unify multiple HID interfaces into a single Endpoint
+KEYBOARD_SHARED_EP = yes
 
-SERIAL_DRIVER = vendor
-
-SPI_DRIVER_REQUIRED = yes
-I2C_DRIVER_REQUIRED = yes
-SERIAL_DRIVER_REQUIRED = yes
-
+SERIAL_DRIVER = usart

@@ -16,14 +16,14 @@ RGB_MATRIX_SUPPORTED = yes  # RGB matrix is supported and enabled by default
 RGBLIGHT_SUPPORTED = yes    # RGB underglow is supported, but not enabled by default
 RGB_MATRIX_ENABLE = yes     # Enable keyboard RGB matrix functionality
 
+# Charybdis nano is a split 3x5 keyboard with a maximum of 3 thumb keys (2 on
+# the trackball side).
 SPLIT_KEYBOARD = yes
 
 POINTING_DEVICE_ENABLE = yes # Enable trackball
 POINTING_DEVICE_DRIVER = pmw3360
+MOUSE_SHARED_EP = no # Unify multiple HID interfaces into a single Endpoint
 
-SERIAL_DRIVER = vendor
-
-SPI_DRIVER_REQUIRED = yes
-I2C_DRIVER_REQUIRED = yes
-SERIAL_DRIVER_REQUIRED = yes
-
+# Enable link-time optimization by default.  The Charybdis packs a lot of
+# features (RGB, Via, trackball) in a small atmega32u4 package.
+LTO_ENABLE = yes

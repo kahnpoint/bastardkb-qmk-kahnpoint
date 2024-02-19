@@ -26,6 +26,7 @@
 #include <platforms/chibios/drivers/i2c_master.h>
 #include "touchbar.h"
 #include <hal.h>
+//#include <platforms/chibios/drivers/uart.c>
 
 #ifdef CONSOLE_ENABLE
 #    include "print.h"
