@@ -18,7 +18,8 @@
 
 #pragma once
 
-#include "quantum.h"
+#include <quantum/quantum.h>
+
 
 #ifdef POINTING_DEVICE_ENABLE
 #    ifndef NO_CHARYBDIS_KEYCODES

@@ -18,8 +18,6 @@
 
 #pragma once
 
-#define CHARYBDIS_CONFIG_SYNC
-#define SPLIT_TRANSACTION_IDS_KB RPC_ID_KB_CONFIG_SYNC,RPC_ID_READ_ALL_PINS,RPC_ID_SEND_ALL_PINS
 
 /* Pointing device configuration. */
 

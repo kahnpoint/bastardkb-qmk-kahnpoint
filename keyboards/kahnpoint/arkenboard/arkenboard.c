@@ -16,15 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
+
+#include <arkenboard/arkenboard.h>
+#include <arkenboard/touchbar.h>
+
 #include QMK_KEYBOARD_H
-//#include <quantum>
-#include "arkenboard.h"
+#include <quantum/quantum.h>
 //#include "transactions.h"
+//#include <quantum/rgblight/rgblight.h>
+//#include <quantum/color.h>
 #include <quantum/split_common/transactions.h>
 #include <platforms/chibios/drivers/i2c_master.h>
 #include <string.h>
-#include <arkenboard/touchbar.h>
-#include <hal.h>
+//#include <hal.h>
 //#include <platforms/chibios/drivers/uart.c>
 
 
@@ -322,7 +328,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
 }
 
 void eeconfig_init_kb(void) {
-    IS_KEYBOARD_MASTER = is_keyboard_master();
     g_charybdis_config.raw = 0;
     write_charybdis_config_to_eeprom(&g_charybdis_config);
     maybe_update_pointing_device_cpi(&g_charybdis_config);
@@ -382,6 +387,8 @@ void housekeeping_task_kb(void) {
 */
 
 void keyboard_post_init_kb(void) {
+
+    IS_KEYBOARD_MASTER = is_keyboard_master();
     maybe_update_pointing_device_cpi(&g_charybdis_config);
 //#    ifdef CHARYBDIS_CONFIG_SYNC
     transaction_register_rpc(RPC_ID_KB_CONFIG_SYNC, charybdis_config_sync_handler);
@@ -403,8 +410,9 @@ i2c_init();
     //i2c_init(&i2c1Driver, I2C1_SCL_PIN, I2C1_SDA_PIN);
 
 //rgb_matrix_enable_noeeprom();
-rgblight_enable_noeeprom();
-    rgblight_sethsv_noeeprom(HSV_RED); // Sets the color to red
+//rgblight_enable_noeeprom();
+rgb_matrix_enable_noeeprom();
+    rgb_matrix_set_color_all(RGB_RED); // Sets the color to red
 
 //if(!IS_KEYBOARD_MASTER){
 
@@ -418,13 +426,13 @@ rgblight_enable_noeeprom();
     writeByte2(COMMAND_CLOCK_PRESCALER, T841_CLOCK_PRESCALER_1);
 
     if (data == 0 || data == 0xFF) {
-    rgblight_sethsv_noeeprom(HSV_RED);
+    rgb_matrix_set_color_all(RGB_RED);
     }else if (data != EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {
-    rgblight_sethsv_noeeprom(HSV_ORANGE);
+    rgb_matrix_set_color_all(RGB_ORANGE);
     }else if (data == EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {
-    rgblight_sethsv_noeeprom(HSV_GREEN);
+    rgb_matrix_set_color_all(RGB_GREEN);
     }else{
-    rgblight_sethsv_noeeprom(HSV_YELLOW);
+    rgb_matrix_set_color_all(RGB_YELLOW);
     }
 
     keyboard_post_init_user();
@@ -484,11 +492,11 @@ void housekeeping_task_kb(void) {
             //works
             for (int i = 0; i < NUM_PINS; i++) {
                 if (local_pins[i] == 1) {
-                    rgblight_sethsv_noeeprom(HSV_BLUE);
+                    rgb_matrix_set_color_all(RGB_BLUE);
                     break;
                 }
             if(i==NUM_PINS-1){
-            rgblight_sethsv_noeeprom(HSV_PURPLE);
+            rgb_matrix_set_color_all(RGB_PURPLE);
             }
             }
             */
@@ -498,9 +506,9 @@ void housekeeping_task_kb(void) {
 
             if (transaction_rpc_send(RPC_ID_SEND_ALL_PINS, sizeof(pin_struct), &pin_struct)) {
                 remote_last_sync = timer_read32();
-                rgblight_sethsv_noeeprom(RGB_GREEN);
+                rgb_matrix_set_color_all(RGB_GREEN);
             }else{
-                rgblight_sethsv_noeeprom(HSV_MAGENTA);
+                rgb_matrix_set_color_all(RGB_MAGENTA);
             }
 
         }
