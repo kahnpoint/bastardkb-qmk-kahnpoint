@@ -1,5 +1,5 @@
-//#include "i2c_master.h"
-#include <platforms/chibios/drivers/i2c_master.h>
+#include "i2c_master.h"
+//#include <platforms/chibios/drivers/i2c_master.h>
 #include "T841Defs.h"
 #include "ATtiny841Lib.h"
 
