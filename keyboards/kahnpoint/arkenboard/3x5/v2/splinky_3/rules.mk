@@ -21,7 +21,10 @@ SPLIT_KEYBOARD = yes
 POINTING_DEVICE_ENABLE = yes # Enable trackball
 POINTING_DEVICE_DRIVER = pmw3360
 
+
 SERIAL_DRIVER = vendor
+SERIAL_ENABLE = yes
+
 #SPI_DRIVER = vendor
 I2C_DRIVER = vendor
 

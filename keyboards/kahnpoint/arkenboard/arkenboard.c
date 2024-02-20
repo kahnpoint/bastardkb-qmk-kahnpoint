@@ -18,6 +18,7 @@
  */
 
 #include "arkenboard.h"
+#include"globals.h"
 #include "transactions.h"
 #include "touchbar.h"
 #include <string.h>

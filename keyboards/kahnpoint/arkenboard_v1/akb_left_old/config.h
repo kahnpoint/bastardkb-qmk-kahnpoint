@@ -17,10 +17,14 @@
  */
 
 #pragma once
- 
+
 /* Trackball angle adjustment. */
-#define ROTATIONAL_TRANSFORM_ANGLE -70
+//#define ROTATIONAL_TRANSFORM_ANGLE -70
+int rotational_transform_angle = -70;
 //#define ROTATIONAL_TRANSFORM_ANGLE 110
+
+#define SPLIT_LAYER_STATE_ENABLE
+#    define SPLIT_LED_STATE_ENABLE //unsure of effects
 
 /* RGB settings. */
 #ifdef RGB_MATRIX_ENABLE

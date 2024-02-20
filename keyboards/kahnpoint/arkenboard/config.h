@@ -18,21 +18,47 @@
 
 #pragma once
 
+// Enable syncing of charybdis config
 #define CHARYBDIS_CONFIG_SYNC
+
+// split keyboard configuration
+#define SPLIT_LED_STATE_ENABLE
+#define SPLIT_LAYER_STATE_ENABLE
+
 
 /* Pointing device configuration. */
 
 // Enable use of pointing device on slave split.
 #define SPLIT_POINTING_ENABLE
+#define POINTING_DEVICE_COMBINED
 
-// Pointing device is on the right split.
-#define POINTING_DEVICE_RIGHT
+// comment this out when flashing the slave side
+#define IS_MASTER_SIDE
+
+// is master side
+#ifdef IS_MASTER_SIDE
+
+//#   define POINTING_DEVICE_INVERT_X
+//#   define POINTING_DEVICE_INVERT_Y
+#   define CHARYBDIS_MINIMUM_DEFAULT_DPI 2400
+#   define ROTATIONAL_TRANSFORM_ANGLE -70 //Trackball angle adjustment.
+
+#endif
+
+// is slave side (not master side)
+#ifndef IS_MASTER_SIDE
+
+//#   define POINTING_DEVICE_INVERT_X
+//#   define POINTING_DEVICE_INVERT_Y
+#   define CHARYBDIS_MINIMUM_DEFAULT_DPI 200
+#   define ROTATIONAL_TRANSFORM_ANGLE -70 //Trackball angle adjustment.
+
+#endif
 
 // Limits the frequency that the sensor is polled for motion.
 #define POINTING_DEVICE_TASK_THROTTLE_MS 1
 
-// Invert X axis on mouse reports.
-#define POINTING_DEVICE_INVERT_X
+
 
 /* RGB matrix support. */
 #ifdef RGB_MATRIX_ENABLE
