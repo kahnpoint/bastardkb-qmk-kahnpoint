@@ -18,6 +18,11 @@
 
 #pragma once
 
+//##ifdef CONSOLE_ENABLE
+#define DEBUG_ENABLE
+#define DEBUG_LEVEL 3
+//##endif
+
 #define RGBLED_NUM 36
 
 #define CHARYBDIS_CONFIG_SYNC

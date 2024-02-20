@@ -19,7 +19,7 @@
 #pragma once
 
 /* Trackball angle adjustment. */
-#define ROTATIONAL_TRANSFORM_ANGLE -25
+#define ROTATIONAL_TRANSFORM_ANGLE -75
 
 /* RGB settings. */
 #ifdef RGB_MATRIX_ENABLE

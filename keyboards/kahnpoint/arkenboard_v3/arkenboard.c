@@ -19,15 +19,16 @@
 
 
 
-#include <arkenboard/arkenboard.h>
-#include <arkenboard/touchbar.h>
+#include "arkenboard.h"
+#include "touchbar.h"
 
 #include QMK_KEYBOARD_H
-#include <quantum/quantum.h>
+#include "quantum.h"
 //#include "transactions.h"
 //#include <quantum/rgblight/rgblight.h>
 //#include <quantum/color.h>
-#include <quantum/split_common/transactions.h>
+//#include <quantum/split_common/transactions.h>
+#include "transactions.h"
 #include <platforms/chibios/drivers/i2c_master.h>
 #include <string.h>
 //#include <hal.h>
@@ -388,18 +389,18 @@ void housekeeping_task_kb(void) {
 
 void keyboard_post_init_kb(void) {
 
+dprintf("keyboard_post_init_kb\n");
+
     IS_KEYBOARD_MASTER = is_keyboard_master();
     maybe_update_pointing_device_cpi(&g_charybdis_config);
-//#    ifdef CHARYBDIS_CONFIG_SYNC
+
+// #define RPC_ID_KB_CONFIG_SYNC 51
+// #define RPC_ID_READ_ALL_PINS 52
+// #define RPC_ID_SEND_ALL_PINS 53
+
     transaction_register_rpc(RPC_ID_KB_CONFIG_SYNC, charybdis_config_sync_handler);
-//#    endif
-
-// }
-
-
-//register the transaction handler for the readAllPins transaction
-transaction_register_rpc(RPC_ID_READ_ALL_PINS, read_all_pins_handler);
-transaction_register_rpc(RPC_ID_SEND_ALL_PINS, send_all_pins_handler);
+    transaction_register_rpc(RPC_ID_READ_ALL_PINS, read_all_pins_handler);
+    transaction_register_rpc(RPC_ID_SEND_ALL_PINS, send_all_pins_handler);
 
 
  //localHalfTouched={0,0,0,0,0,0};
@@ -504,12 +505,34 @@ void housekeeping_task_kb(void) {
             static send_all_pins_slave_to_master_t pin_struct;
             memcpy(&pin_struct.results, local_pins, sizeof(pin_struct.results));
 
-            if (transaction_rpc_send(RPC_ID_SEND_ALL_PINS, sizeof(pin_struct), &pin_struct)) {
+            bool rpcResult = transaction_rpc_send(RPC_ID_SEND_ALL_PINS, sizeof(pin_struct), &pin_struct);
+            if (rpcResult) {
                 remote_last_sync = timer_read32();
-                rgb_matrix_set_color_all(RGB_GREEN);
+//green if local_pins has at least 1 pin equal to 1, otherwise blue;
+for (int i = 0; i < NUM_PINS; i++) {
+    if (local_pins[i] == 1) {
+        rgb_matrix_set_color_all(RGB_GREEN);
+        break;
+    }
+if(i==NUM_PINS-1){
+rgb_matrix_set_color_all(RGB_BLUE);
+}
+    }
             }else{
-                rgb_matrix_set_color_all(RGB_MAGENTA);
+//red if local_pins has at least 1 pin equal to 1, otherwise magenta;
+for (int i = 0; i < NUM_PINS; i++) {
+    if (local_pins[i] == 1) {
+        rgb_matrix_set_color_all(RGB_RED);
+        break;
+    }
+if(i==NUM_PINS-1){
+rgb_matrix_set_color_all(RGB_MAGENTA);
+}
+    }
+
             }
+
+            dprintf("rpcResult: %d, local_pins %d%d%d%d%d%d\n",rpcResult, local_pins[0],local_pins[1],local_pins[2],local_pins[3],local_pins[4],local_pins[5]);
 
         }
 

@@ -19,6 +19,14 @@
 #pragma once
 
 
+
+// #define KB_CONFIG_SYNC RPC_ID_KB_CONFIG_SYNC
+// #define READ_ALL_PINS RPC_ID_READ_ALL_PINS
+// #define SEND_ALL_PINS RPC_ID_SEND_ALL_PINS
+
+// #define SPLIT_LAYER_STATE_ENABLE
+// #define SPLIT_LED_STATE_ENABLE
+
 /* Pointing device configuration. */
 
 // Enable use of pointing device on slave split.

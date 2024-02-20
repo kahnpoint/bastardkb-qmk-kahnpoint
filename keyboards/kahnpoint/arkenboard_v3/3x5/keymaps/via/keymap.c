@@ -16,9 +16,9 @@
  */
 #include QMK_KEYBOARD_H
 //#include "quantum.h"
-#include <quantum/quantum.h>
+#include "quantum.h"
 #include <quantum/split_common/transactions.h>
-#include <arkenboard/touchbar.h>
+#include "touchbar.h"
 #include <string.h>
 
 bool any_key_pressed(void) {
@@ -359,6 +359,7 @@ layer_off(2);
 layer_off(4);
 layer_off(6);
 unregister_code(KC_LALT);
+
 // rest;
 }else if (remoteHalfTouched[1] == 1) {
     rgb_matrix_set_color_all(RGB_MAGENTA);
@@ -367,6 +368,7 @@ layer_off(2);
 layer_off(4);
 layer_off(6);
 unregister_code(KC_LALT);
+
 // layer 2;
 }else if (remoteHalfTouched[2] == 1) {
     rgb_matrix_set_color_all(RGB_PURPLE);
@@ -375,6 +377,7 @@ layer_on(2);
 layer_off(4);
 layer_off(6);
 unregister_code(KC_LALT);
+
 // layer 4;
 }else if (remoteHalfTouched[3] == 1) {
     rgb_matrix_set_color_all(RGB_BLUE);
@@ -383,6 +386,7 @@ layer_off(2);
 layer_on(4);
 layer_off(6);
 unregister_code(KC_LALT);
+
 // layer 6;
 }else if (remoteHalfTouched[4] == 1) {
     rgb_matrix_set_color_all(RGB_AZURE);
@@ -391,6 +395,7 @@ layer_off(2);
 layer_off(4);
 layer_on(6);
 unregister_code(KC_LALT);
+
 // alt;
 }else if (remoteHalfTouched[5] == 1) {
     rgb_matrix_set_color_all(RGB_CYAN);
@@ -399,8 +404,9 @@ layer_off(2);
 layer_off(4);
 layer_off(6);
 register_code(KC_LALT);
+
 }else{
-   // rgb_matrix_set_color_all(RGB_WHITE);
+rgb_matrix_set_color_all(RGB_WHITE);
 unregister_code(KC_LCTL);
 layer_off(2);
 layer_off(4);
