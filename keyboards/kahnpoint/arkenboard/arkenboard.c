@@ -18,7 +18,6 @@
  */
 
 #include "arkenboard.h"
-#include"globals.h"
 #include "transactions.h"
 #include "touchbar.h"
 #include <string.h>
@@ -362,6 +361,7 @@ i2c_init();
 //rgb_matrix_enable_noeeprom();
 //rgblight_enable_noeeprom();
 rgb_matrix_enable_noeeprom();
+//rgb_matrix_set_val(BACKLIGHT_BRIGHTNESS);
     rgb_matrix_set_color_all(RGB_RED); // Sets the color to red
 
 //if(!IS_KEYBOARD_MASTER){

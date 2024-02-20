@@ -22,8 +22,8 @@
 #define CHARYBDIS_CONFIG_SYNC
 
 // split keyboard configuration
-#define SPLIT_LED_STATE_ENABLE
-#define SPLIT_LAYER_STATE_ENABLE
+//#define SPLIT_LED_STATE_ENABLE
+//#define SPLIT_LAYER_STATE_ENABLE
 
 
 /* Pointing device configuration. */
@@ -50,7 +50,7 @@
 
 //#   define POINTING_DEVICE_INVERT_X
 //#   define POINTING_DEVICE_INVERT_Y
-#   define CHARYBDIS_MINIMUM_DEFAULT_DPI 200
+#   define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
 #   define ROTATIONAL_TRANSFORM_ANGLE -70 //Trackball angle adjustment.
 
 #endif
@@ -59,15 +59,12 @@
 #define POINTING_DEVICE_TASK_THROTTLE_MS 1
 
 
-
 /* RGB matrix support. */
 #ifdef RGB_MATRIX_ENABLE
 #    define SPLIT_TRANSPORT_MIRROR
-#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
+#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 64 // will need to be set with a potentiometer later;
 #    define RGB_DISABLE_WHEN_USB_SUSPENDED
 #    define RGB_MATRIX_KEYPRESSES
-
-// Startup values.
 #    define RGB_MATRIX_DEFAULT_VAL 64
 
 // Rainbow swirl as startup mode.
