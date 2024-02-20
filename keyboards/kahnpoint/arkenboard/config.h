@@ -18,6 +18,7 @@
 
 #pragma once
 
+#define CHARYBDIS_CONFIG_SYNC
 
 /* Pointing device configuration. */
 

@@ -336,12 +336,57 @@ void charybdis_config_sync_handler(uint8_t initiator2target_buffer_size, const v
 #    endif
 
 void keyboard_post_init_kb(void) {
+
+    IS_KEYBOARD_MASTER = is_keyboard_master();
     maybe_update_pointing_device_cpi(&g_charybdis_config);
-#    ifdef CHARYBDIS_CONFIG_SYNC
+//#    ifdef CHARYBDIS_CONFIG_SYNC
     transaction_register_rpc(RPC_ID_KB_CONFIG_SYNC, charybdis_config_sync_handler);
-#    endif
+//#    endif
+
+// }
+
+
+//register the transaction handler for the readAllPins transaction
+transaction_register_rpc(RPC_ID_READ_ALL_PINS, read_all_pins_handler);
+transaction_register_rpc(RPC_ID_SEND_ALL_PINS, send_all_pins_handler);
+
+
+ //localHalfTouched={0,0,0,0,0,0};
+ //remoteHalfTouched={0,0,0,0,0,0};
+
+    // Initialize the I2C driver
+i2c_init();
+    //i2c_init(&i2c1Driver, I2C1_SCL_PIN, I2C1_SDA_PIN);
+
+//rgb_matrix_enable_noeeprom();
+//rgblight_enable_noeeprom();
+rgb_matrix_enable_noeeprom();
+    rgb_matrix_set_color_all(RGB_RED); // Sets the color to red
+
+//if(!IS_KEYBOARD_MASTER){
+
+    writeByte2(COMMAND_SET_MODE,MODE_REGISTER_DEC);
+    uint8_t data=readByte(FIRMWARE_REVISION_REG);
+
+    writeByte2(T841_ADCSRA, _BV(T841_ADEN) | 4 | 1);
+    writeByte2(T841_DIDR0, 0xAF);
+    writeByte2(T841_PRR,/* _BV(T841_PRADC) | */_BV(T841_PRSPI) | _BV(T841_PRUSART0) | _BV(T841_PRUSART1));
+    writeByte2(COMMAND_SET_MODE, MODE_COMMAND);
+    writeByte2(COMMAND_CLOCK_PRESCALER, T841_CLOCK_PRESCALER_1);
+
+    if (data == 0 || data == 0xFF) {
+    rgb_matrix_set_color_all(RGB_RED);
+    }else if (data != EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {
+    rgb_matrix_set_color_all(RGB_ORANGE);
+    }else if (data == EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {
+    rgb_matrix_set_color_all(RGB_GREEN);
+    }else{
+    rgb_matrix_set_color_all(RGB_YELLOW);
+    }
+
     keyboard_post_init_user();
 }
+
 
 #    ifdef CHARYBDIS_CONFIG_SYNC
 void housekeeping_task_kb(void) {
@@ -370,6 +415,14 @@ void housekeeping_task_kb(void) {
     }
     // No need to invoke the user-specific callback, as it's been called
     // already.
+
+
+    uint8_t* local_pins = readAllPins();
+
+    if (IS_KEYBOARD_MASTER) {
+        memcpy(localHalfTouched, local_pins, sizeof(localHalfTouched)); // Use memcpy to copy the elements
+    }
+
 }
 #    endif // CHARYBDIS_CONFIG_SYNC
 #endif     // POINTING_DEVICE_ENABLE

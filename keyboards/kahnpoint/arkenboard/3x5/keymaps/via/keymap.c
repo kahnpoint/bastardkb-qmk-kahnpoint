@@ -15,6 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "quantum.h"
+//#include "transactions.h"
+#include <arkenboard/touchbar.h>
+#include <string.h>
+
+bool any_key_pressed(void) {
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        matrix_row_t row_state = matrix_get_row(row);
+        if (row_state) { // if any key in this row is pressed
+            return true;
+        }
+    }
+    return false;
+}
 
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #    include "timer.h"
@@ -255,3 +269,144 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
 #endif
+
+
+
+void housekeeping_task_user(void) {
+//rgb_matrix_set_color_all(RGB_GREEN);
+
+//if any key is pressed, turn the lighs off
+if (any_key_pressed()) {
+    rgb_matrix_set_color_all(RGB_BLACK);
+}else{
+
+
+if(IS_KEYBOARD_MASTER){
+
+//rgb_matrix_set_color_all(RGB_WHITE);
+
+
+//left shift;
+if (localHalfTouched[0] == 1){
+    rgb_matrix_set_color_all(RGB_ORANGE);
+register_code(KC_LSFT);
+layer_off(1);
+layer_off(3);
+layer_off(5);
+unregister_code(KC_LGUI);
+
+// rest;
+}else if (localHalfTouched[1] == 1) {
+    rgb_matrix_set_color_all(RGB_GOLDENROD);
+unregister_code(KC_LSFT);
+layer_off(1);
+layer_off(3);
+layer_off(5);
+unregister_code(KC_LGUI);
+
+// layer 1;
+}else if (localHalfTouched[2] == 1) {
+    rgb_matrix_set_color_all(RGB_YELLOW);
+unregister_code(KC_LSFT);
+layer_on(1);
+layer_off(3);
+layer_off(5);
+unregister_code(KC_LGUI);
+
+// layer 3;
+}else if (localHalfTouched[3] == 1) {
+    rgb_matrix_set_color_all(RGB_CHARTREUSE);
+unregister_code(KC_LSFT);
+layer_off(1);
+layer_on(3);
+layer_off(5);
+unregister_code(KC_LGUI);
+
+// layer 3;
+}else if (localHalfTouched[4] == 1) {
+    rgb_matrix_set_color_all(RGB_GREEN);
+unregister_code(KC_LSFT);
+layer_off(1);
+layer_off(2);
+layer_on(3);
+unregister_code(KC_LGUI);
+
+// windows;
+}else if (localHalfTouched[5] == 1) {
+    rgb_matrix_set_color_all(RGB_SPRINGGREEN);
+unregister_code(KC_LSFT);
+layer_off(1);
+layer_off(3);
+layer_off(5);
+register_code(KC_LGUI);
+
+}else{
+    //rgb_matrix_set_color_all(RGB_WHITE);
+unregister_code(KC_LSFT);
+layer_off(1);
+layer_off(3);
+layer_off(5);
+unregister_code(KC_LGUI);
+
+}
+
+
+//ctrl;
+if (remoteHalfTouched[0] == 1){
+    rgb_matrix_set_color_all(RGB_PINK);
+register_code(KC_LCTL);
+layer_off(2);
+layer_off(4);
+layer_off(6);
+unregister_code(KC_LALT);
+// rest;
+}else if (remoteHalfTouched[1] == 1) {
+    rgb_matrix_set_color_all(RGB_MAGENTA);
+unregister_code(KC_LCTL);
+layer_off(2);
+layer_off(4);
+layer_off(6);
+unregister_code(KC_LALT);
+// layer 2;
+}else if (remoteHalfTouched[2] == 1) {
+    rgb_matrix_set_color_all(RGB_PURPLE);
+unregister_code(KC_LCTL);
+layer_on(2);
+layer_off(4);
+layer_off(6);
+unregister_code(KC_LALT);
+// layer 4;
+}else if (remoteHalfTouched[3] == 1) {
+    rgb_matrix_set_color_all(RGB_BLUE);
+unregister_code(KC_LCTL);
+layer_off(2);
+layer_on(4);
+layer_off(6);
+unregister_code(KC_LALT);
+// layer 6;
+}else if (remoteHalfTouched[4] == 1) {
+    rgb_matrix_set_color_all(RGB_AZURE);
+unregister_code(KC_LCTL);
+layer_off(2);
+layer_off(4);
+layer_on(6);
+unregister_code(KC_LALT);
+// alt;
+}else if (remoteHalfTouched[5] == 1) {
+    rgb_matrix_set_color_all(RGB_CYAN);
+unregister_code(KC_LCTL);
+layer_off(2);
+layer_off(4);
+layer_off(6);
+register_code(KC_LALT);
+}else{
+   // rgb_matrix_set_color_all(RGB_WHITE);
+unregister_code(KC_LCTL);
+layer_off(2);
+layer_off(4);
+layer_off(6);
+unregister_code(KC_LALT);
+}
+}
+}
+}
