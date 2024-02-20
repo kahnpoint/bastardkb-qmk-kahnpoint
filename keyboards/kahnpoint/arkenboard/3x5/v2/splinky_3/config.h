@@ -28,6 +28,14 @@
 /* VBUS detection. */
 #define USB_VBUS_PIN GP19
 
+/* I2C settings. */
+
+#define I2C_DRIVER       I2CD1
+#define I2C1_SDA_PIN     GP2
+#define I2C1_SCL_PIN     GP3
+#define I2C1_CLOCK_SPEED 100000
+
+
 /* SPI & PMW3360 settings. */
 #define SPI_DRIVER SPID0
 #define SPI_SCK_PIN GP22
