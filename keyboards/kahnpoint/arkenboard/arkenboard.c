@@ -420,13 +420,8 @@ void housekeeping_task_kb(void) {
     // already.
 
 
-    uint8_t* local_pins = readAllPins();
 
-
-    if (IS_KEYBOARD_MASTER) {
-        memcpy(localHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
-    }
-
+/*
 
     static bool remoteHalfIsTouched = false;
 
@@ -448,44 +443,58 @@ void housekeeping_task_kb(void) {
             rgb_matrix_set_color_all(RGB_PURPLE);
         }
     }
+*/
 
 
-/*
     if (IS_KEYBOARD_MASTER) {
+
+
+
+    uint8_t* local_pins = readAllPins();
+
+
+        memcpy(localHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
+
+
+
+
         // Keep track of the last state
         static uint32_t           remote_last_sync             = 0;
         bool                      remote_needs_sync            = false;
 
         // Send to slave every 20ms regardless of state change.
-        if (timer_elapsed32(remote_last_sync) > 20) {
+        if (timer_elapsed32(remote_last_sync) > 10) {
             remote_needs_sync = true;
         }
 
         // Perform the sync if requested.
         if (remote_needs_sync) {
 
-            send_all_pins_slave_to_master_t pin_struct;
-            //memcpy(&pin_struct.results, local_pins, sizeof(pin_struct.results));
+            remote_last_sync = timer_read32();
 
-            if (transaction_rpc_exec(RPC_ID_READ_ALL_PINS, 0, NULL, sizeof(pin_struct), &pin_struct)) {
-                remote_last_sync = timer_read32();
-                if(remoteHalfIsTouched){
-                    rgb_matrix_set_color_all(RGB_GREEN);
-                }else{
-                    rgb_matrix_set_color_all(RGB_BLUE);
-                }
+            //send_all_pins_slave_to_master_t pin_struct;
+            //memcpy(pin_struct.results, local_pins, NUM_PINS * sizeof(uint8_t));
+
+            if (transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), &remoteHalfTouched)) {
+                //rgb_matrix_set_color_all(RGB_GREEN);
             }else{
-                if(remoteHalfIsTouched){
-                    rgb_matrix_set_color_all(RGB_RED);
-                }else{
-                    rgb_matrix_set_color_all(RGB_MAGENTA);
-                }
+                //rgb_matrix_set_color_all(RGB_MAGENTA);
             }
+        //memcpy(&remoteHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
 
         }
 
     }
-*/
+
+    if (!IS_KEYBOARD_MASTER) {
+
+        uint8_t* local_pins = readAllPins();
+        memcpy(&remoteHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t));
+
+        //for (int i = 0; i < NUM_PINS; i++) {
+        //    remoteHalfTouched[i] = local_pins[i];
+        //}
+    }
 
 /*
     if (!IS_KEYBOARD_MASTER) {
@@ -506,7 +515,7 @@ void housekeeping_task_kb(void) {
 
             remote_last_sync = timer_read32();
 
-            if (transaction_rpc_send(RPC_ID_SEND_ALL_PINS, sizeof(uint8_t), &local_pins[0])) {
+            if (transaction_rpc_exec(RPC_ID_SEND_ALL_PINS, sizeof(uint8_t), &local_pins[0],sizeof(uint8_t), &local_pins[0])) {
                 if(remoteHalfIsTouched){
                     rgb_matrix_set_color_all(RGB_GREEN);
                 }else{

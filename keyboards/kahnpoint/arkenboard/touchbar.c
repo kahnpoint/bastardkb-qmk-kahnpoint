@@ -108,13 +108,23 @@ void charybdis_config_sync_handler(uint8_t initiator2target_buffer_size, const v
 */
 
 void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
-    read_all_pins_slave_to_master_t *s2m = (read_all_pins_slave_to_master_t*)out_data;
+    if (out_buflen == (NUM_PINS * sizeof(uint8_t))) {
 
-    // read all the touchbar pins
-    uint8_t* pin_results = readAllPins();
+    //works
+    //uint8_t* pin_results = readAllPins();
+    //memcpy(out_data, pin_results, NUM_PINS * sizeof(uint8_t));
 
-    // copy the results to s2m->results
-    memcpy(s2m->results, pin_results, NUM_PINS * sizeof(uint8_t));
+    //works
+    //uint8_t dummy_data[6] = {0,1,1,1,1,1};
+    //memcpy(out_data, &dummy_data, NUM_PINS * sizeof(uint8_t));
+
+
+    memcpy(out_data, remoteHalfTouched, NUM_PINS * sizeof(uint8_t));
+
+    // does not work
+    //out_data = &localHalfTouched;
+
+    }
 }
 
 /*
