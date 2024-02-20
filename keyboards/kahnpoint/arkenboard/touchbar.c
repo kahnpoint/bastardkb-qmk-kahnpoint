@@ -108,19 +108,27 @@ void charybdis_config_sync_handler(uint8_t initiator2target_buffer_size, const v
 */
 
 void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
-
-    //const read_all_pins_master_to_slave_t *m2s = (const read_all_pins_master_to_slave_t*)in_data;
     read_all_pins_slave_to_master_t *s2m = (read_all_pins_slave_to_master_t*)out_data;
 
     // read all the touchbar pins
     uint8_t* pin_results = readAllPins();
 
-
-    memcpy(s2m->results, pin_results, sizeof(s2m->results));
+    // copy the results to s2m->results
+    memcpy(s2m->results, pin_results, NUM_PINS * sizeof(uint8_t));
 }
 
+/*
 void send_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
-    if (in_buflen == sizeof(send_all_pins_slave_to_master_t)) {
-        memcpy(&remoteHalfTouched, ((send_all_pins_slave_to_master_t*)in_data)->results, sizeof(remoteHalfTouched));
+
+    if (in_buflen == NUM_PINS * sizeof(uint8_t)) {
+        memcpy(remoteHalfTouched, in_data, NUM_PINS*sizeof(uint8_t));
+    }
+}
+*/
+
+void send_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
+
+    if (in_buflen == sizeof(uint8_t)) {
+        memcpy(&remoteHalfTouched[0], in_data, NUM_PINS*sizeof(uint8_t));
     }
 }

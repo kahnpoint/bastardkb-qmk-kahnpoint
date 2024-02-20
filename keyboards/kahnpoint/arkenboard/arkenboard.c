@@ -390,7 +390,7 @@ rgb_matrix_enable_noeeprom();
 
 #    ifdef CHARYBDIS_CONFIG_SYNC
 void housekeeping_task_kb(void) {
-    if (is_keyboard_master()) {
+    if (IS_KEYBOARD_MASTER) {
         // Keep track of the last state, so that we can tell if we need to propagate to slave.
         static charybdis_config_t last_charybdis_config = {0};
         static uint32_t           last_sync             = 0;
@@ -410,6 +410,9 @@ void housekeeping_task_kb(void) {
         if (needs_sync) {
             if (transaction_rpc_send(RPC_ID_KB_CONFIG_SYNC, sizeof(g_charybdis_config), &g_charybdis_config)) {
                 last_sync = timer_read32();
+                //rgb_matrix_set_color_all(RGB_GREEN);
+            }else{
+                //rgb_matrix_set_color_all(RGB_RED);
             }
         }
     }
@@ -419,9 +422,109 @@ void housekeeping_task_kb(void) {
 
     uint8_t* local_pins = readAllPins();
 
+
     if (IS_KEYBOARD_MASTER) {
-        memcpy(localHalfTouched, local_pins, sizeof(localHalfTouched)); // Use memcpy to copy the elements
+        memcpy(localHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
     }
+
+
+    static bool remoteHalfIsTouched = false;
+
+    if(!IS_KEYBOARD_MASTER){
+        for (int i = 0; i < NUM_PINS; i++) {
+            if (local_pins[i] == 1) {
+                remoteHalfIsTouched = true;
+                break;
+            }
+            if(i==NUM_PINS-1){
+                remoteHalfIsTouched = false;
+            }
+        }
+
+        //works
+        if(remoteHalfIsTouched){
+            rgb_matrix_set_color_all(RGB_GREEN);
+        }else{
+            rgb_matrix_set_color_all(RGB_PURPLE);
+        }
+    }
+
+
+/*
+    if (IS_KEYBOARD_MASTER) {
+        // Keep track of the last state
+        static uint32_t           remote_last_sync             = 0;
+        bool                      remote_needs_sync            = false;
+
+        // Send to slave every 20ms regardless of state change.
+        if (timer_elapsed32(remote_last_sync) > 20) {
+            remote_needs_sync = true;
+        }
+
+        // Perform the sync if requested.
+        if (remote_needs_sync) {
+
+            send_all_pins_slave_to_master_t pin_struct;
+            //memcpy(&pin_struct.results, local_pins, sizeof(pin_struct.results));
+
+            if (transaction_rpc_exec(RPC_ID_READ_ALL_PINS, 0, NULL, sizeof(pin_struct), &pin_struct)) {
+                remote_last_sync = timer_read32();
+                if(remoteHalfIsTouched){
+                    rgb_matrix_set_color_all(RGB_GREEN);
+                }else{
+                    rgb_matrix_set_color_all(RGB_BLUE);
+                }
+            }else{
+                if(remoteHalfIsTouched){
+                    rgb_matrix_set_color_all(RGB_RED);
+                }else{
+                    rgb_matrix_set_color_all(RGB_MAGENTA);
+                }
+            }
+
+        }
+
+    }
+*/
+
+/*
+    if (!IS_KEYBOARD_MASTER) {
+        // Keep track of the last state
+        static uint32_t           remote_last_sync             = 0;
+        bool                      remote_needs_sync            = false;
+
+        // Send to slave every 20ms regardless of state change.
+        if (timer_elapsed32(remote_last_sync) > 20) {
+            remote_needs_sync = true;
+        }
+
+        // Perform the sync if requested.
+        if (remote_needs_sync) {
+
+            //send_all_pins_slave_to_master_t pin_struct;
+            //memcpy(&pin_struct.results, local_pins, sizeof(pin_struct.results));
+
+            remote_last_sync = timer_read32();
+
+            if (transaction_rpc_send(RPC_ID_SEND_ALL_PINS, sizeof(uint8_t), &local_pins[0])) {
+                if(remoteHalfIsTouched){
+                    rgb_matrix_set_color_all(RGB_GREEN);
+                }else{
+                    rgb_matrix_set_color_all(RGB_BLUE);
+                }
+            }else{
+                if(remoteHalfIsTouched){
+                    rgb_matrix_set_color_all(RGB_RED);
+                }else{
+                    rgb_matrix_set_color_all(RGB_MAGENTA);
+                }
+            }
+
+
+        }
+
+    }
+*/
 
 }
 #    endif // CHARYBDIS_CONFIG_SYNC
