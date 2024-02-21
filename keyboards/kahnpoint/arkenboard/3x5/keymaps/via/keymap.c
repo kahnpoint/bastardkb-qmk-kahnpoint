@@ -609,10 +609,10 @@ int hsv_colors[12][3] = {
 bool set_layer_color_for_debugging( uint8_t value){
 for(int i = 0; i < NUM_PINS; i++){
     if (localHalfTouched[i] == 1){
-        rgb_matrix_set_color_all(hsv_colors[2*i][0], hsv_colors[2*i][1], value);
+        rgblight_sethsv(hsv_colors[2*i][0], hsv_colors[2*i][1], value);
         return true;
     }else if (remoteHalfTouched[i] == 1){
-        rgb_matrix_set_color_all(hsv_colors[2*i + 1][0], hsv_colors[2*i + 1 ][1], value);
+        rgblight_sethsv(hsv_colors[2*i + 1][0], hsv_colors[2*i + 1 ][1], value);
         return true;
     }
 }
@@ -634,11 +634,11 @@ if(IS_KEYBOARD_MASTER){
 
 //rgb_matrix_set_color_all(RGB_WHITE);
 
-set_layer_color_for_debugging(128);
-handle_touch_layers_and_keys();
+//set_layer_color_for_debugging(128);
+//handle_touch_layers_and_keys();
 
 
-/*
+
 //left shift;
 if (localHalfTouched[0] == 1){
     rgb_matrix_set_color_all(RGB_ORANGE);
@@ -760,7 +760,7 @@ layer_off(4);
 layer_off(6);
 unregister_code(KC_LALT);
 }
-*/
+
 }
 
 }
