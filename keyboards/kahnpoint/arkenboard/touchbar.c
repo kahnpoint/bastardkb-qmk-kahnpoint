@@ -115,11 +115,11 @@ void read_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_b
     //memcpy(out_data, pin_results, NUM_PINS * sizeof(uint8_t));
 
     //works
-    //uint8_t dummy_data[6] = {0,1,1,1,1,1};
-    //memcpy(out_data, &dummy_data, NUM_PINS * sizeof(uint8_t));
+//    uint8_t dummy_data[6] = {0,1,1,1,1,1};
+//    memcpy(out_data, &dummy_data, NUM_PINS * sizeof(uint8_t));
 
 
-    memcpy(out_data, remoteHalfTouched, NUM_PINS * sizeof(uint8_t));
+    memcpy(out_data, localHalfTouched, NUM_PINS * sizeof(uint8_t));
 
     // does not work
     //out_data = &localHalfTouched;

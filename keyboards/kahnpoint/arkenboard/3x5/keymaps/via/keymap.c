@@ -270,6 +270,127 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void rgb_matrix_update_pwm_buffers(void);
 #endif
 
+uint8_t LAYER_COUNT = 8;
+bool SHIFT_PRESSED = false;
+bool WIN_PRESSED = false;
+bool CTRL_PRESSED = false;
+bool ALT_PRESSED = false;
+bool LOCAL_REST = false;
+bool REMOTE_REST = false;
+
+void disable_all_layers_except(uint8_t layer){
+    for(int i = 1; i < LAYER_COUNT; i++){
+        if (i == layer){
+            layer_on(i);
+        }else{
+            layer_off(i);
+        }
+    }
+}
+
+void disable_all_layers(void){
+    disable_all_layers_except(255);
+}
+
+//example: handle_special_key_press(&localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+void handle_special_key_press(uint8_t value, bool* status, enum qk_keycode_defines keycode) {
+
+    if((value == 1) && !(*status)){
+        register_code(keycode);
+        *status = true;
+    }
+    else if((value == 0) && *status){
+        unregister_code(keycode);
+        *status = false;
+    }
+}
+
+
+
+bool handle_touch_layers_and_keys(void){
+//check the local first for shift;
+handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+
+//check the remote first for ctrl;
+handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
+
+//check the local last for alt;
+handle_special_key_press(localHalfTouched[NUM_PINS-1], &ALT_PRESSED, KC_LALT) ;
+
+//check the remote last for win;
+handle_special_key_press(remoteHalfTouched[NUM_PINS-1], &WIN_PRESSED, KC_LGUI) ;
+
+
+//check the middle 3 for layer shifts;
+for(uint8_t i = 2; i < NUM_PINS - 1; i++) {
+    if (localHalfTouched[i] == 1 && (localHalfTouched[1] == 0)) {// the second parameter checks that the rest key is not pressed;
+        disable_all_layers_except(2 * i);
+        return true;
+    } else if (remoteHalfTouched[i] == 1 && (remoteHalfTouched[1] == 0)) {// the second parameter checks that the rest key is not pressed;
+        disable_all_layers_except(2 * i + 1);
+        return true;
+    } else if (i == NUM_PINS - 2){
+        disable_all_layers();
+        return false;
+    }
+}
+
+return false;
+}
+
+/*
+#define HSV_AZURE       132, 102, 255
+#define HSV_BLACK         0,   0,   0
+#define HSV_BLUE        170, 255, 255
+#define HSV_CHARTREUSE   64, 255, 255
+#define HSV_CORAL        11, 176, 255
+#define HSV_CYAN        128, 255, 255
+#define HSV_GOLD         36, 255, 255
+#define HSV_GOLDENROD    30, 218, 218
+#define HSV_GREEN        85, 255, 255
+#define HSV_MAGENTA     213, 255, 255
+#define HSV_ORANGE       21, 255, 255
+#define HSV_PINK        234, 128, 255
+#define HSV_PURPLE      191, 255, 255
+#define HSV_RED           0, 255, 255
+#define HSV_SPRINGGREEN 106, 255, 255
+#define HSV_TEAL        128, 255, 128
+#define HSV_TURQUOISE   123,  90, 112
+#define HSV_WHITE         0,   0, 255
+#define HSV_YELLOW       43, 255, 255
+#define HSV_OFF         HSV_BLACK
+*/
+
+int hsv_colors[12][3] = {
+    {HSV_AZURE},
+    {HSV_BLUE},
+    {HSV_CHARTREUSE},
+    {HSV_CYAN},
+    {HSV_GOLD},
+    {HSV_GREEN},
+    {HSV_MAGENTA},
+    {HSV_ORANGE},
+    {HSV_PINK},
+    {HSV_PURPLE},
+    {HSV_RED},
+    {HSV_SPRINGGREEN}
+};
+
+
+
+bool set_layer_color_for_debugging( uint8_t value){
+for(int i = 0; i < NUM_PINS; i++){
+    if (localHalfTouched[i] == 1){
+        rgb_matrix_set_color_all(hsv_colors[2*i][0], hsv_colors[2*i][1], value);
+        return true;
+    }else if (remoteHalfTouched[i] == 1){
+        rgb_matrix_set_color_all(hsv_colors[2*i + 1][0], hsv_colors[2*i + 1 ][1], value);
+        return true;
+    }
+}
+//rgb_matrix_set_color(i, HSV_BLACK);
+return false;
+}
 
 
 void housekeeping_task_user(void) {
@@ -285,7 +406,11 @@ if(IS_KEYBOARD_MASTER){
 
 //rgb_matrix_set_color_all(RGB_WHITE);
 
+set_layer_color_for_debugging(128);
+handle_touch_layers_and_keys();
 
+
+/*
 //left shift;
 if (localHalfTouched[0] == 1){
     rgb_matrix_set_color_all(RGB_ORANGE);
@@ -407,6 +532,9 @@ layer_off(4);
 layer_off(6);
 unregister_code(KC_LALT);
 }
+*/
 }
+
 }
+
 }

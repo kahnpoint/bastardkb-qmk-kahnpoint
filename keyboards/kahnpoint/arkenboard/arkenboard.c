@@ -450,21 +450,20 @@ void housekeeping_task_kb(void) {
     if (IS_KEYBOARD_MASTER) {
 
 
+        //read all local pins
+        uint8_t* local_pins = readAllPins();
 
-    uint8_t* local_pins = readAllPins();
+        //copy the local pins to localHalfTouched;
+        memcpy(&localHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t));
 
-
-        memcpy(localHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
-
-
-
+        // remote half sync
 
         // Keep track of the last state
-        static uint32_t           remote_last_sync             = 0;
-        bool                      remote_needs_sync            = false;
+        static uint8_t remote_last_sync= 0;
+        bool remote_needs_sync = false;
 
-        // Send to slave every 20ms regardless of state change.
-        if (timer_elapsed32(remote_last_sync) > 10) {
+        // recieve from slave every 100ms regardless of state change.
+        if (timer_elapsed32(remote_last_sync) > 50) {
             remote_needs_sync = true;
         }
 
@@ -476,21 +475,27 @@ void housekeeping_task_kb(void) {
             //send_all_pins_slave_to_master_t pin_struct;
             //memcpy(pin_struct.results, local_pins, NUM_PINS * sizeof(uint8_t));
 
-            if (transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), &remoteHalfTouched)) {
-                //rgb_matrix_set_color_all(RGB_GREEN);
+            //bool resultRecieved = transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), &remoteHalfTouched);
+
+            //this if statement is required, otherwise the compiler strips out the transaction_rpc_recv call
+            if (transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), remoteHalfTouched)) {
+                rgb_matrix_set_color_all(RGB_GREEN);
+                //dprintf("success");
             }else{
-                //rgb_matrix_set_color_all(RGB_MAGENTA);
+                rgb_matrix_set_color_all(RGB_MAGENTA);
+                //dprintf("fail");
             }
         //memcpy(&remoteHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t)); // Use memcpy to copy the elements
 
-        }
+         }
 
     }
+
 
     if (!IS_KEYBOARD_MASTER) {
 
         uint8_t* local_pins = readAllPins();
-        memcpy(&remoteHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t));
+        memcpy(&localHalfTouched, local_pins, NUM_PINS * sizeof(uint8_t));
 
         //for (int i = 0; i < NUM_PINS; i++) {
         //    remoteHalfTouched[i] = local_pins[i];
@@ -498,6 +503,9 @@ void housekeeping_task_kb(void) {
     }
 
 /*
+
+//old
+
     if (!IS_KEYBOARD_MASTER) {
         // Keep track of the last state
         static uint32_t           remote_last_sync             = 0;

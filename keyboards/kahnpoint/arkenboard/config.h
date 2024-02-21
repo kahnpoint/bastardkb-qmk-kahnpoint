@@ -33,27 +33,27 @@
 #define POINTING_DEVICE_COMBINED
 
 // comment this out when flashing the slave side
-#define IS_MASTER_SIDE
+//#define IS_MASTER_SIDE
 
 // is master side
-#ifdef IS_MASTER_SIDE
+//#ifdef IS_MASTER_SIDE
 
-//#   define POINTING_DEVICE_INVERT_X
-//#   define POINTING_DEVICE_INVERT_Y
-#   define CHARYBDIS_MINIMUM_DEFAULT_DPI 2400
-#   define ROTATIONAL_TRANSFORM_ANGLE -70 //Trackball angle adjustment.
+    #   define POINTING_DEVICE_INVERT_X_RIGHT
+    //#   define POINTING_DEVICE_INVERT_Y
+    #   define CHARYBDIS_MINIMUM_DEFAULT_DPI 1600
+    #   define ROTATIONAL_TRANSFORM_ANGLE -75 //Trackball angle adjustment.
 
-#endif
+//#endif
 
 // is slave side (not master side)
-#ifndef IS_MASTER_SIDE
+//#ifndef IS_MASTER_SIDE
 
-//#   define POINTING_DEVICE_INVERT_X
-//#   define POINTING_DEVICE_INVERT_Y
-#   define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
-#   define ROTATIONAL_TRANSFORM_ANGLE -70 //Trackball angle adjustment.
+   // #   define POINTING_DEVICE_INVERT_X_LEFT
+    //#   define POINTING_DEVICE_INVERT_Y
+//    #   define CHARYBDIS_MINIMUM_DEFAULT_DPI 400
+//    #   define ROTATIONAL_TRANSFORM_ANGLE 75 //Trackball angle adjustment.
 
-#endif
+//#endif
 
 // Limits the frequency that the sensor is polled for motion.
 #define POINTING_DEVICE_TASK_THROTTLE_MS 1
@@ -62,7 +62,7 @@
 /* RGB matrix support. */
 #ifdef RGB_MATRIX_ENABLE
 #    define SPLIT_TRANSPORT_MIRROR
-#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 64 // will need to be set with a potentiometer later;
+#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 64 // will need to be set with a potentiometer later
 #    define RGB_DISABLE_WHEN_USB_SUSPENDED
 #    define RGB_MATRIX_KEYPRESSES
 #    define RGB_MATRIX_DEFAULT_VAL 64
