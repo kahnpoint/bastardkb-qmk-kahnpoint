@@ -375,6 +375,8 @@ rgb_matrix_enable_noeeprom();
     writeByte2(COMMAND_SET_MODE, MODE_COMMAND);
     writeByte2(COMMAND_CLOCK_PRESCALER, T841_CLOCK_PRESCALER_1);
 
+    data=readByte(FIRMWARE_REVISION_REG);
+
     if (data == 0 || data == 0xFF) {
     rgb_matrix_set_color_all(RGB_RED);
     }else if (data != EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {

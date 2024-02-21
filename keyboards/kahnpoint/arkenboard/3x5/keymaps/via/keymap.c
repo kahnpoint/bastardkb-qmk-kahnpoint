@@ -35,13 +35,14 @@ bool any_key_pressed(void) {
 #endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
 enum charybdis_keymap_layers {
-    LAYER_BASE = 0, // qwerty;
-    LAYOUT_LAYER_FUNCTION_AND_NUMBERS, // function keys across top, number keys on middle row, ;
+    LAYER_BASE = 0, // qwerty
+    LAYER_FUNCTIONS_AND_NUMBERS, // function keys across top, number keys on middle row
     LAYER_SYMBOLS,
-    LAYOUT_LAYER_MACROS,
-    LAYOUT_LAYER_NAVIGATION_AND_MEDIA,
+    LAYER_MACROS,
+    LAYER_NAVIGATION_AND_MEDIA,
 };
 
+/*
 // Automatically enable sniping-mode on the pointer layer.
 #define CHARYBDIS_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
@@ -56,6 +57,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #        define CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD 8
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD
 #endif     // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
+*/
 
 // #define ESC_MED LT(LAYER_MEDIA, KC_ESC)
 // #define SPC_NAV LT(LAYER_SYMBOLS, KC_SPC)
@@ -82,14 +84,14 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define _______________DEAD_FUNCTIONS_______________ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 #define _______________AUDIO_CONTROLS_______________ KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_AUDIO_VOL_UP,KC_AUDIO_VOL_DOWN
 
-#define _______________LEFT_BRACKETS_______________ KC_LEFT_CURLY_BRACKET,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET,  KC_LEFT_BRACKET
-#define _______________RIGHT_BRACKETS_______________ KC_RIGHT_CURLY_BRACKET,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET,  KC_RIGHT_BRACKET
+#define _______________LEFT_BRACKETS_______________ KC_LEFT_CURLY_BRACE,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET,  KC_LEFT_BRACKET
+#define _______________RIGHT_BRACKETS_______________ KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET,  KC_RIGHT_BRACKET
 #define _______________BRACKET_MACROS_______________ CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO,  SQUARE_BRACKETS_MACRO
 #define _______________QUOTE_MACROS_______________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
 
 #define _______________SETTINGS_CONTROLS_______________ CTRL_ALT_DEL_MACRO, KC_BRIGHTNESS_UP, KC_BRIGHTNESS_DOWN, _______, _______
 #define _______________BROWSER_CONTROLS_______________  KC_WWW_HOME, KC_WWW_BACK, KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
-#define _______________APPLICATIONS_______________      KC_MAIL, KC_CALCULATOR, KC_MY_COMPUTER,KC_CONTROL_PANEL,KC_ASSISTANT
+#define _______________APPLICATIONS_______________      KC_MAIL, KC_CALCULATOR, KC_MY_COMPUTER, KC_CONTROL_PANEL, KC_ASSISTANT
 
 
 #define LAYOUT_LAYER_BLANK                                                   \
@@ -107,78 +109,36 @@ static uint16_t auto_pointer_layer_timer = 0;
                         _______________DEAD_FUNCTIONS_______________
 
 //layer 1 - numbers
-#define LAYOUT_LAYER_FUNCTION_AND_NUMBERS                                                   \
-    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,               KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, \ // function keys across top,
-    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,   KC_0, \ // number keys on middle row,
-    KC_TILDE,  _______________LEFT_BRACKETS_______________,  KC_F11,  KC_F12, KC_ENTER,  KC_BTN2,  KC_ESC, \ // brackets and enter on bottom row;
+#define LAYOUT_LAYER_FUNCTIONS_AND_NUMBERS                                                   \
+    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,               KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, \
+    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,   KC_0, \
+    KC_TILDE,  _______________LEFT_BRACKETS_______________,  KC_F11,  KC_F12, KC_ENTER,  KC_BTN2,  KC_ESC, \
                                   _______________DEAD_FUNCTIONS_______________
 
 //layer 2 - symbols
 #define LAYOUT_LAYER_SYMBOLS                                                               \
-    KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE, KC_PIPE, \ //number symbols on top row,
-    KC_PLUS, KC_EQUAL, KC_BACKSPACE, KC_DELETE, KC_COLON,      KC_INSERT, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \ // symbols and arrows on middle row,
-    KC_MINUS,  _______________RIGHT_BRACKETS_______________,     KC_BACKSLASH, KC_SLASH, KC_COMMA, KC_DOT,  KC_ESC\ // brackets and punctuation on bottom row
-                                ________________DEAD_FUNCTIONS_______________
+    KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE, KC_PIPE, \
+    KC_PLUS, KC_EQUAL, KC_BACKSPACE, KC_DELETE, KC_COLON,      KC_INSERT, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \
+    KC_MINUS,  _______________RIGHT_BRACKETS_______________,     KC_BACKSLASH, KC_SLASH, KC_COMMA, KC_DOT,  KC_ESC, \
+                                _______________DEAD_FUNCTIONS_______________
 
 //layer 3 - macros
 #define LAYOUT_LAYER_MACROS                                                           \
     KC_QUESTION,   _______________QUOTE_MACROS_______________,                               _______, _______, _______, _______, EMOJI_MACRO, \
     TURBOFISH_MACRO,    KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE, DOUBLE_COLON_MACRO,             HTML_COMMENT_MACRO, KC_HOME, KC_PGDN,   KC_PGUP, KC_END, \
     HELLO_WORLD_MACRO, _______________BRACKET_MACROS_______________,                         JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC, \
-                        ________________DEAD_FUNCTIONS_______________
+                        _______________DEAD_FUNCTIONS_______________
 
 
 //layer 4 - navigation/media
 #define LAYOUT_LAYER_NAVIGATION_AND_MEDIA                                                  \
-    _______________SETTINGS_CONTROLS_______________   _______________AUDIO_CONTROLS_______________ \
-    _______________BROWSER_CONTROLS_______________   KC_PRINT_SCREEN, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_UP_MACRO, WIN_RIGHT_MACRO,\
-    _______________APPLICATIONS_______________   ALT_TAB_MACRO, SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT, KC_ESC,\
+    _______________SETTINGS_CONTROLS_______________,   _______________AUDIO_CONTROLS_______________, \
+    _______________BROWSER_CONTROLS_______________,   KC_PRINT_SCREEN, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_UP_MACRO, WIN_RIGHT_MACRO, \
+    _______________APPLICATIONS_______________,   ALT_TAB_MACRO, SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT, KC_ESC, \
    _______________DEAD_FUNCTIONS_______________
 
 
 
-
-
-// {} () <> []
-enum custom_keycodes {
-//brackets
-  CURLY_BRACKETS_MACRO = QK_USER_0,
-    PARENTHESIS_BRACKETS_MACRO,
-    ANGLE_BRACKETS_MACRO,
-    SQUARE_BRACKETS_MACRO,
-// quotes
-    DOUBLE_QUOTES_MACRO,
-    SINGLE_QUOTES_MACRO,
-    BACKTICKS_MACRO,
-//colon
-    DOUBLE_COLON_MACRO,
-TURBOFISH_MACRO,
-//pure keycodes
-/*
-PURE_LEFT_BRACKET,
-PURE_RIGHT_BRACKET,
-PURE_PERIOD,
-PURE_COMMA,
-*/
-//comments
-HTML_COMMENT_MACRO,
-JS_COMMENT_MACRO,
-JS_DOC_MULTILINE_COMMENT_MACRO,
-PYTHON_TRIPLE_QUOTES_MACRO,
-
-//windows
-WIN_LEFT_MACRO,
-WIN_RIGHT_MACRO,
-WIN_UP_MACRO,
-WIN_DOWN_MACRO,
-
-//other
-SHIFT_TAB_MACRO,
-ALT_TAB_MACRO,
-CTRL_ALT_DEL_MACRO,
-HELLO_WORLD_MACRO,
-EMOJI_MACRO
-};
 
 
 
@@ -220,9 +180,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("''" SS_TAP(X_LEFT));
             }
             break;
-    case BACKTICK_MACRO:
+    case BACKTICKS_MACRO:
             if (record->event.pressed) {
-                // when keycode BACKTICK_MACRO is pressed
+                // when keycode BACKTICKS_MACRO is pressed
                 SEND_STRING("``" SS_TAP(X_LEFT));
             }
             break;
@@ -475,23 +435,27 @@ KC_DOUBLE_QUOTE 	KC_DQUO, KC_DQT 	"
              R25,         R26,         R27,         R28,  _L_PTR(R29), \
       __VA_ARGS__
 #define POINTER_MOD(...) _POINTER_MOD(__VA_ARGS__)
+*/
 
 #define LAYOUT_wrapper(...) LAYOUT(__VA_ARGS__)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_wrapper(
-    POINTER_MOD(HOME_ROW_MOD_GACS(LAYOUT_LAYER_BASE))
+    //POINTER_MOD(HOME_ROW_MOD_GACS(LAYOUT_LAYER_BASE))
+    LAYOUT_LAYER_BASE
   ),
-  [LAYER_FUNCTION] = LAYOUT_wrapper(LAYOUT_LAYER_FUNCTION_AND_NUMBERS),
+  [LAYER_FUNCTIONS_AND_NUMBERS] = LAYOUT_wrapper(LAYOUT_LAYER_FUNCTIONS_AND_NUMBERS),
   [LAYER_SYMBOLS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS),
-  [LAYER_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_MEDIA),
-  [LAYER_NUMERAL] = LAYOUT_wrapper(LAYOUT_LAYER_NUMERAL),
-  [LAYER_POINTER] = LAYOUT_wrapper(LAYOUT_LAYER_POINTER),
-  [LAYER_NAVIGATION] = LAYOUT_wrapper(LAYOUT_LAYER_MACROS),
+  //[LAYER_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_MEDIA),
+  [LAYER_MACROS] = LAYOUT_wrapper(LAYOUT_LAYER_MACROS),
+  //[LAYER_NUMERAL] = LAYOUT_wrapper(LAYOUT_LAYER_NUMERAL),
+  //[LAYER_POINTER] = LAYOUT_wrapper(LAYOUT_LAYER_POINTER),
+  [LAYER_NAVIGATION_AND_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_NAVIGATION_AND_MEDIA),
 };
-// clang-format on
-*/
 
+// clang-format on
+
+/*
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
@@ -526,6 +490,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 #    endif // CHARYBDIS_AUTO_SNIPING_ON_LAYER
 #endif     // POINTING_DEVICE_ENABLE
+*/
 
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in
@@ -592,7 +557,7 @@ for(uint8_t i = 2; i < NUM_PINS - 1; i++) {
     } else if (remoteHalfTouched[i] == 1 && (remoteHalfTouched[1] == 0)) {// the second parameter checks whether the rest key is not pressed;
         disable_all_layers_except((2 * (i-2)) + 1);
         return true;
-    } else if (i == NUM_PINS - 2){
+    } else if (i == NUM_PINS - 1){
         disable_all_layers();
         return false;
     }

@@ -43,6 +43,49 @@ enum charybdis_keycodes {
 #        define DRG_TOG DRAGSCROLL_MODE_TOGGLE
 #    endif // !NO_CHARYBDIS_KEYCODES
 
+// {} () <> []
+enum custom_user_keycodes {
+//brackets
+  CURLY_BRACKETS_MACRO =  QK_USER_0, //0x7E40,
+    PARENTHESIS_BRACKETS_MACRO,
+    ANGLE_BRACKETS_MACRO,
+    SQUARE_BRACKETS_MACRO,
+// quotes
+    DOUBLE_QUOTES_MACRO,
+    SINGLE_QUOTES_MACRO,
+    BACKTICKS_MACRO,
+//colon
+    DOUBLE_COLON_MACRO,
+TURBOFISH_MACRO,
+//pure keycodes
+/*
+PURE_LEFT_BRACKET,
+PURE_RIGHT_BRACKET,
+PURE_PERIOD,
+PURE_COMMA,
+*/
+//comments
+HTML_COMMENT_MACRO,
+JS_COMMENT_MACRO,
+JS_DOC_MULTILINE_COMMENT_MACRO,
+PYTHON_TRIPLE_QUOTES_MACRO,
+
+//windows
+WIN_LEFT_MACRO,
+WIN_RIGHT_MACRO,
+WIN_UP_MACRO,
+WIN_DOWN_MACRO,
+
+//other
+SHIFT_TAB_MACRO,
+ALT_TAB_MACRO,
+CTRL_ALT_DEL_MACRO,
+HELLO_WORLD_MACRO,
+EMOJI_MACRO
+};
+
+
+
 /** \brief Return the current DPI value for the pointer's default mode. */
 uint16_t charybdis_get_pointer_default_dpi(void);
 
