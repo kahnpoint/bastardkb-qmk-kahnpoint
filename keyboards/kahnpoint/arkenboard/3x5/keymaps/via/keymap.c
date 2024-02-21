@@ -35,13 +35,11 @@ bool any_key_pressed(void) {
 #endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
 enum charybdis_keymap_layers {
-    LAYER_BASE = 0,
-    LAYER_FUNCTION,
-    LAYER_NAVIGATION,
-    LAYER_MEDIA,
-    LAYER_POINTER,
-    LAYER_NUMERAL,
+    LAYER_BASE = 0, // qwerty;
+    LAYOUT_LAYER_FUNCTION_AND_NUMBERS, // function keys across top, number keys on middle row, ;
     LAYER_SYMBOLS,
+    LAYOUT_LAYER_MACROS,
+    LAYOUT_LAYER_NAVIGATION_AND_MEDIA,
 };
 
 // Automatically enable sniping-mode on the pointer layer.
@@ -59,12 +57,12 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD
 #endif     // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
-#define ESC_MED LT(LAYER_MEDIA, KC_ESC)
-#define SPC_NAV LT(LAYER_NAVIGATION, KC_SPC)
-#define TAB_FUN LT(LAYER_FUNCTION, KC_TAB)
-#define ENT_SYM LT(LAYER_SYMBOLS, KC_ENT)
-#define BSP_NUM LT(LAYER_NUMERAL, KC_BSPC)
-#define _L_PTR(KC) LT(LAYER_POINTER, KC)
+// #define ESC_MED LT(LAYER_MEDIA, KC_ESC)
+// #define SPC_NAV LT(LAYER_SYMBOLS, KC_SPC)
+// #define TAB_FUN LT(LAYER_FUNCTION, KC_TAB)
+// #define ENT_SYM LT(LAYER_NAVIGATION, KC_ENT)
+// #define BSP_NUM LT(LAYER_NUMERAL, KC_BSPC)
+// #define _L_PTR(KC) LT(LAYER_POINTER, KC)
 
 #ifndef POINTING_DEVICE_ENABLE
 #    define DRGSCRL KC_NO
@@ -73,42 +71,335 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    define SNIPING KC_NO
 #endif // !POINTING_DEVICE_ENABLE
 
-// clang-format off
-/** \brief QWERTY layout (3 rows, 10 columns). */
-#define LAYOUT_LAYER_BASE                                                                     \
-       KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, \
-       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT, \
-       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, \
-                      ESC_MED, SPC_NAV, TAB_FUN, ENT_SYM, BSP_NUM
 
 /** Convenience row shorthands. */
 #define _______________DEAD_HALF_ROW_______________ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+#define _______________DEAD_FULL_ROW_______________ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+#define _______________TRNS_HALF_ROW_______________ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+#define _______________TRNS_FULL_ROW_______________ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 #define ______________HOME_ROW_GACS_L______________ KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX
 #define ______________HOME_ROW_GACS_R______________ XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI
+#define _______________DEAD_FUNCTIONS_______________ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+#define _______________AUDIO_CONTROLS_______________ KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_AUDIO_VOL_UP,KC_AUDIO_VOL_DOWN
+
+#define _______________LEFT_BRACKETS_______________ KC_LEFT_CURLY_BRACKET,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET,  KC_LEFT_BRACKET
+#define _______________RIGHT_BRACKETS_______________ KC_RIGHT_CURLY_BRACKET,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET,  KC_RIGHT_BRACKET
+#define _______________BRACKET_MACROS_______________ CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO,  SQUARE_BRACKETS_MACRO
+#define _______________QUOTE_MACROS_______________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
+
+#define _______________SETTINGS_CONTROLS_______________ CTRL_ALT_DEL_MACRO, KC_BRIGHTNESS_UP, KC_BRIGHTNESS_DOWN, _______, _______
+#define _______________BROWSER_CONTROLS_______________  KC_WWW_HOME, KC_WWW_BACK, KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
+#define _______________APPLICATIONS_______________      KC_MAIL, KC_CALCULATOR, KC_MY_COMPUTER,KC_CONTROL_PANEL,KC_ASSISTANT
+
+
+#define LAYOUT_LAYER_BLANK                                                   \
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,\
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,\
+   _______________DEAD_FUNCTIONS_______________
+
+
+// layer 0 - letters
+#define LAYOUT_LAYER_BASE                                                                     \
+       KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, \
+       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L, KC_SEMICOLON, \
+       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_SPC, KC_BTN1,  KC_ESC, \
+                        _______________DEAD_FUNCTIONS_______________
+
+//layer 1 - numbers
+#define LAYOUT_LAYER_FUNCTION_AND_NUMBERS                                                   \
+    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,               KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, \ // function keys across top,
+    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,   KC_0, \ // number keys on middle row,
+    KC_TILDE,  _______________LEFT_BRACKETS_______________,  KC_F11,  KC_F12, KC_ENTER,  KC_BTN2,  KC_ESC, \ // brackets and enter on bottom row;
+                                  _______________DEAD_FUNCTIONS_______________
+
+//layer 2 - symbols
+#define LAYOUT_LAYER_SYMBOLS                                                               \
+    KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE, KC_PIPE, \ //number symbols on top row,
+    KC_PLUS, KC_EQUAL, KC_BACKSPACE, KC_DELETE, KC_COLON,      KC_INSERT, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \ // symbols and arrows on middle row,
+    KC_MINUS,  _______________RIGHT_BRACKETS_______________,     KC_BACKSLASH, KC_SLASH, KC_COMMA, KC_DOT,  KC_ESC\ // brackets and punctuation on bottom row
+                                ________________DEAD_FUNCTIONS_______________
+
+//layer 3 - macros
+#define LAYOUT_LAYER_MACROS                                                           \
+    KC_QUESTION,   _______________QUOTE_MACROS_______________,                               _______, _______, _______, _______, EMOJI_MACRO, \
+    TURBOFISH_MACRO,    KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE, DOUBLE_COLON_MACRO,             HTML_COMMENT_MACRO, KC_HOME, KC_PGDN,   KC_PGUP, KC_END, \
+    HELLO_WORLD_MACRO, _______________BRACKET_MACROS_______________,                         JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC, \
+                        ________________DEAD_FUNCTIONS_______________
+
+
+//layer 4 - navigation/media
+#define LAYOUT_LAYER_NAVIGATION_AND_MEDIA                                                  \
+    _______________SETTINGS_CONTROLS_______________   _______________AUDIO_CONTROLS_______________ \
+    _______________BROWSER_CONTROLS_______________   KC_PRINT_SCREEN, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_UP_MACRO, WIN_RIGHT_MACRO,\
+    _______________APPLICATIONS_______________   ALT_TAB_MACRO, SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT, KC_ESC,\
+   _______________DEAD_FUNCTIONS_______________
+
+
+
+
+
+// {} () <> []
+enum custom_keycodes {
+//brackets
+  CURLY_BRACKETS_MACRO = QK_USER_0,
+    PARENTHESIS_BRACKETS_MACRO,
+    ANGLE_BRACKETS_MACRO,
+    SQUARE_BRACKETS_MACRO,
+// quotes
+    DOUBLE_QUOTES_MACRO,
+    SINGLE_QUOTES_MACRO,
+    BACKTICKS_MACRO,
+//colon
+    DOUBLE_COLON_MACRO,
+TURBOFISH_MACRO,
+//pure keycodes
+/*
+PURE_LEFT_BRACKET,
+PURE_RIGHT_BRACKET,
+PURE_PERIOD,
+PURE_COMMA,
+*/
+//comments
+HTML_COMMENT_MACRO,
+JS_COMMENT_MACRO,
+JS_DOC_MULTILINE_COMMENT_MACRO,
+PYTHON_TRIPLE_QUOTES_MACRO,
+
+//windows
+WIN_LEFT_MACRO,
+WIN_RIGHT_MACRO,
+WIN_UP_MACRO,
+WIN_DOWN_MACRO,
+
+//other
+SHIFT_TAB_MACRO,
+ALT_TAB_MACRO,
+CTRL_ALT_DEL_MACRO,
+HELLO_WORLD_MACRO,
+EMOJI_MACRO
+};
+
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case CURLY_BRACKETS_MACRO:
+      if (record->event.pressed) {
+        // when keycode CURLY_BRACKETS_MACRO is pressed
+        SEND_STRING("{}" SS_TAP(X_LEFT));
+      }
+      break;
+    case PARENTHESIS_BRACKETS_MACRO:
+        if (record->event.pressed) {
+            // when keycode PARENTHESIS_BRACKETS_MACRO is pressed
+            SEND_STRING("()" SS_TAP(X_LEFT));
+        }
+        break;
+    case ANGLE_BRACKETS_MACRO:
+            if (record->event.pressed) {
+                // when keycode ANGLE_BRACKETS_MACRO is pressed
+                SEND_STRING("<>" SS_TAP(X_LEFT));
+            }
+            break;
+    case SQUARE_BRACKETS_MACRO:
+            if (record->event.pressed) {
+                // when keycode SQUARE_BRACKETS_MACRO is pressed
+                SEND_STRING("[]" SS_TAP(X_LEFT));
+            }
+            break;
+    case DOUBLE_QUOTES_MACRO:
+            if (record->event.pressed) {
+                // when keycode DOUBLE_QUOTES_MACRO is pressed
+                SEND_STRING("\"\"" SS_TAP(X_LEFT));
+            }
+            break;
+    case SINGLE_QUOTES_MACRO:
+            if (record->event.pressed) {
+                // when keycode SINGLE_QUOTES_MACRO is pressed
+                SEND_STRING("''" SS_TAP(X_LEFT));
+            }
+            break;
+    case BACKTICK_MACRO:
+            if (record->event.pressed) {
+                // when keycode BACKTICK_MACRO is pressed
+                SEND_STRING("``" SS_TAP(X_LEFT));
+            }
+            break;
+    case DOUBLE_COLON_MACRO:
+            if (record->event.pressed) {
+                // when keycode DOUBLE_COLON_MACRO is pressed
+                SEND_STRING("::" SS_TAP(X_LEFT));
+            }
+            break;
+case TURBOFISH_MACRO:
+            if (record->event.pressed) {
+                // when keycode DOUBLE_COLON_MACRO is pressed
+                SEND_STRING("::<>" SS_TAP(X_LEFT));
+            }
+            break;
+    case HTML_COMMENT_MACRO:
+            if (record->event.pressed) {
+                // when keycode HTML_COMMENT_MACRO is pressed
+                SEND_STRING("<!--  -->" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+            }
+            break;
+    case JS_COMMENT_MACRO:
+            if (record->event.pressed) {
+                // when keycode JS_COMMENT_MACRO is pressed
+                SEND_STRING("//" SS_TAP(X_LEFT));
+            }
+            break;
+    case JS_DOC_MULTILINE_COMMENT_MACRO:
+            if (record->event.pressed) {
+                // when keycode JS_DOC_MULTILINE_COMMENT_MACRO is pressed
+                //create the string, go back 3 and hit enter;
+                SEND_STRING("/**  */" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER));
+            }
+            break;
+    case PYTHON_TRIPLE_QUOTES_MACRO:
+            if (record->event.pressed) {
+                // when keycode PYTHON_TRIPLE_QUOTES_MACRO is pressed
+                //create the string, go back 3 and hit enter;
+                SEND_STRING("\"\"\"\"\"\"" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT));
+            }
+            break;
+    case WIN_LEFT_MACRO:
+      if (record->event.pressed) {
+        // when keycode WIN_LEFT_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_LEFT) SS_UP(X_LGUI));
+      }
+      break;
+    case WIN_RIGHT_MACRO:
+      if (record->event.pressed) {
+        // when keycode WIN_RIGHT_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_LEFT) SS_UP(X_LGUI));
+      }
+      break;
+    case WIN_UP_MACRO:
+      if (record->event.pressed) {
+        // when keycode WIN_UP_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_UP) SS_UP(X_LGUI));
+      }
+      break;
+    case WIN_DOWN_MACRO:
+      if (record->event.pressed) {
+        // when keycode WIN_DOWN_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_DOWN) SS_UP(X_LGUI));
+      }
+      break;
+    case ALT_TAB_MACRO:
+      if (record->event.pressed) {
+        // when keycode ALT_TAB_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_TAB) SS_UP(X_LALT));
+      }
+      break;
+    case SHIFT_TAB_MACRO:
+      if (record->event.pressed) {
+        // when keycode SHIFT_TAB_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LSFT) SS_TAP(X_TAB) SS_UP(X_LSFT));
+      }
+      break;
+    case CTRL_ALT_DEL_MACRO:
+      if (record->event.pressed) {
+        // when keycode CTRL_ALT_DEL_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_TAP(X_DELETE) SS_UP(X_LALT) SS_UP(X_LCTL));
+      }
+      break;
+    case HELLO_WORLD_MACRO:
+      if (record->event.pressed) {
+        // when keycode HELLO_WORLD_MACRO is pressed
+        SEND_STRING("Hello, World!");
+      }
+      break;
+    case EMOJI_MACRO:
+      if (record->event.pressed) {
+        // when keycode EMOJI_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_DOT) SS_UP(X_LGUI));
+      }
+      break;
+  }
+
+  return true;
+}
 
 /*
- * Layers used on the Charybdis Nano.
- *
- * These layers started off heavily inspired by the Miryoku layout, but trimmed
- * down and tailored for a stock experience that is meant to be fundation for
- * further personalization.
- *
- * See https://github.com/manna-harbour/miryoku for the original layout.
- */
+#define LAYOUT_LAYER_SYMBOLS                                                               \
+    _______________DEAD_HALF_ROW_______________, _______________DEAD_HALF_ROW_______________, \
+    ______________HOME_ROW_GACS_L______________, KC_CAPS, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \
+    _______________DEAD_HALF_ROW_______________,  KC_INS, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, \
+                      XXXXXXX, _______, XXXXXXX,  KC_ENT, KC_BSPC
+*/
+/*
+
+// KC_EXCLAIM 	KC_EXLM 	!
+// KC_AT 		@
+// KC_HASH 		#
+// KC_DOLLAR 	KC_DLR 	$
+// KC_PERCENT 	KC_PERC 	%
+// KC_CIRCUMFLEX 	KC_CIRC 	^
+// KC_AMPERSAND 	KC_AMPR 	&
+// KC_ASTERISK 	KC_ASTR 	*
+// KC_LEFT_PAREN 	KC_LPRN 	(
+// KC_RIGHT_PAREN 	KC_RPRN 	)
+
+// KC_LEFT_CURLY_BRACE 	KC_LCBR 	{
+// KC_RIGHT_CURLY_BRACE 	KC_RCBR 	}
+
+//KC_LEFT_ANGLE_BRACKET 	KC_LABK, KC_LT 	<
+//KC_RIGHT_ANGLE_BRACKET 	KC_RABK, KC_GT 	>
+
+//KC_LEFT_BRACKET 	KC_LBRC 	[ and {
+//KC_RIGHT_BRACKET 	KC_RBRC 	] and }
+//KC_QUESTION 	KC_QUES 	?
+//KC_COMMA 	KC_COMM 	, and <
+//KC_DOT 		. and >
+//KC_PIPE 		|
+//KC_UNDERSCORE 	KC_UNDS 	_
+
+
+// KC_TILDE 	KC_TILD 	~
+// KC_PLUS 		+
+// KC_MINUS 	KC_MINS 	- and _
+// KC_EQUAL 	KC_EQL 	= and +
+// KC_COLON 	KC_COLN 	:
+// KC_SLASH 	KC_SLSH 	/ and ?
+//KC_GRAVE 	KC_GRV 	` and ~
+
+
+KC_DOUBLE_QUOTE 	KC_DQUO, KC_DQT 	"
+// KC_BACKSLASH 	KC_BSLS 	\ and |
+// KC_QUOTE 	KC_QUOT 	' and "
+
+
+
+*/
+
+
+
 
 /**
- * \brief Function layer.
+ * \brief Navigation layer.
  *
- * Secondary right-hand layer has function keys mirroring the numerals on the
- * primary layer with extras on the pinkie column, plus system keys on the inner
- * column. App is on the tertiary thumb key and other thumb keys are duplicated
- * from the base layer to enable auto-repeat.
+ * Secondary left-hand layer has shifted symbols in the same locations to reduce
+ * chording when using mods with shifted symbols. `KC_LPRN` is duplicated next to
+ * `KC_RPRN`.
  */
-#define LAYOUT_LAYER_FUNCTION                                                                 \
-    _______________DEAD_HALF_ROW_______________, KC_PSCR,   KC_F7,   KC_F8,   KC_F9,  KC_F12, \
-    ______________HOME_ROW_GACS_L______________, KC_SCRL,   KC_F4,   KC_F5,   KC_F6,  KC_F11, \
-    _______________DEAD_HALF_ROW_______________, KC_PAUS,   KC_F1,   KC_F2,   KC_F3,  KC_F10, \
-                      XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX
+/*
+#define LAYOUT_LAYER_MACROS                                                                  \
+    KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR, _______________DEAD_HALF_ROW_______________, \
+    KC_COLN,  KC_DLR, KC_PERC, KC_CIRC, KC_PLUS, ______________HOME_ROW_GACS_R______________, \
+    KC_TILD, KC_EXLM,   KC_AT, KC_HASH, KC_PIPE, _______________DEAD_HALF_ROW_______________, \
+                      KC_LPRN, KC_RPRN, KC_UNDS, _______, XXXXXXX
+*/
+
+
+
+
+
+
+
+
 
 /**
  * \brief Media layer.
@@ -116,58 +407,26 @@ static uint16_t auto_pointer_layer_timer = 0;
  * Tertiary left- and right-hand layer is media and RGB control.  This layer is
  * symmetrical to accomodate the left- and right-hand trackball.
  */
+/*
 #define LAYOUT_LAYER_MEDIA                                                                    \
     XXXXXXX,RGB_RMOD, RGB_TOG, RGB_MOD, XXXXXXX, XXXXXXX,RGB_RMOD, RGB_TOG, RGB_MOD, XXXXXXX, \
     KC_MPRV, KC_VOLD, KC_MUTE, KC_VOLU, KC_MNXT, KC_MPRV, KC_VOLD, KC_MUTE, KC_VOLU, KC_MNXT, \
     XXXXXXX, XXXXXXX, XXXXXXX,  EE_CLR, QK_BOOT, QK_BOOT,  EE_CLR, XXXXXXX, XXXXXXX, XXXXXXX, \
                       _______, KC_MPLY, KC_MSTP, KC_MSTP, KC_MPLY
+*/
+
+
 
 /** \brief Mouse emulation and pointer functions. */
+/*
 #define LAYOUT_LAYER_POINTER                                                                  \
     XXXXXXX, XXXXXXX, XXXXXXX, DPI_MOD, S_D_MOD, S_D_MOD, DPI_MOD, XXXXXXX, XXXXXXX, XXXXXXX, \
     ______________HOME_ROW_GACS_L______________, ______________HOME_ROW_GACS_R______________, \
     _______, DRGSCRL, SNIPING,  EE_CLR, QK_BOOT, QK_BOOT,  EE_CLR, SNIPING, DRGSCRL, _______, \
                       KC_BTN2, KC_BTN1, KC_BTN3, KC_BTN3, KC_BTN1
+*/
 
-/**
- * \brief Navigation layer.
- *
- * Primary right-hand layer (left home thumb) is navigation and editing. Cursor
- * keys are on the home position, line and page movement below, clipboard above,
- * caps lock and insert on the inner column. Thumb keys are duplicated from the
- * base layer to avoid having to layer change mid edit and to enable auto-repeat.
- */
-#define LAYOUT_LAYER_NAVIGATION                                                               \
-    _______________DEAD_HALF_ROW_______________, _______________DEAD_HALF_ROW_______________, \
-    ______________HOME_ROW_GACS_L______________, KC_CAPS, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \
-    _______________DEAD_HALF_ROW_______________,  KC_INS, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, \
-                      XXXXXXX, _______, XXXXXXX,  KC_ENT, KC_BSPC
 
-/**
- * \brief Numeral layout.
- *
- * Primary left-hand layer (right home thumb) is numerals and symbols. Numerals
- * are in the standard numpad locations with symbols in the remaining positions.
- * `KC_DOT` is duplicated from the base layer.
- */
-#define LAYOUT_LAYER_NUMERAL                                                                  \
-    KC_LBRC,    KC_7,    KC_8,    KC_9, KC_RBRC, _______________DEAD_HALF_ROW_______________, \
-    KC_SCLN,    KC_4,    KC_5,    KC_6,  KC_EQL, ______________HOME_ROW_GACS_R______________, \
-     KC_GRV,    KC_1,    KC_2,    KC_3, KC_BSLS, _______________DEAD_HALF_ROW_______________, \
-                       KC_DOT,    KC_0, KC_MINS, XXXXXXX, _______
-
-/**
- * \brief Symbols layer.
- *
- * Secondary left-hand layer has shifted symbols in the same locations to reduce
- * chording when using mods with shifted symbols. `KC_LPRN` is duplicated next to
- * `KC_RPRN`.
- */
-#define LAYOUT_LAYER_SYMBOLS                                                                  \
-    KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR, _______________DEAD_HALF_ROW_______________, \
-    KC_COLN,  KC_DLR, KC_PERC, KC_CIRC, KC_PLUS, ______________HOME_ROW_GACS_R______________, \
-    KC_TILD, KC_EXLM,   KC_AT, KC_HASH, KC_PIPE, _______________DEAD_HALF_ROW_______________, \
-                      KC_LPRN, KC_RPRN, KC_UNDS, _______, XXXXXXX
 
 /**
  * \brief Add Home Row mod to a layout.
@@ -179,6 +438,7 @@ static uint16_t auto_pointer_layer_timer = 0;
  *
  *     HOME_ROW_MOD_GACS(LAYER_ALPHAS_QWERTY)
  */
+/*
 #define _HOME_ROW_MOD_GACS(                                            \
     L00, L01, L02, L03, L04, R05, R06, R07, R08, R09,                  \
     L10, L11, L12, L13, L14, R15, R16, R17, R18, R19,                  \
@@ -189,6 +449,7 @@ static uint16_t auto_pointer_layer_timer = 0;
              R15,  RSFT_T(R16), RCTL_T(R17), LALT_T(R18), RGUI_T(R19), \
       __VA_ARGS__
 #define HOME_ROW_MOD_GACS(...) _HOME_ROW_MOD_GACS(__VA_ARGS__)
+*/
 
 /**
  * \brief Add pointer layer keys to a layout.
@@ -200,6 +461,7 @@ static uint16_t auto_pointer_layer_timer = 0;
  *
  *     POINTER_MOD(LAYER_ALPHAS_QWERTY)
  */
+/*
 #define _POINTER_MOD(                                                  \
     L00, L01, L02, L03, L04, R05, R06, R07, R08, R09,                  \
     L10, L11, L12, L13, L14, R15, R16, R17, R18, R19,                  \
@@ -220,14 +482,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_wrapper(
     POINTER_MOD(HOME_ROW_MOD_GACS(LAYOUT_LAYER_BASE))
   ),
-  [LAYER_FUNCTION] = LAYOUT_wrapper(LAYOUT_LAYER_FUNCTION),
-  [LAYER_NAVIGATION] = LAYOUT_wrapper(LAYOUT_LAYER_NAVIGATION),
+  [LAYER_FUNCTION] = LAYOUT_wrapper(LAYOUT_LAYER_FUNCTION_AND_NUMBERS),
+  [LAYER_SYMBOLS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS),
   [LAYER_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_MEDIA),
   [LAYER_NUMERAL] = LAYOUT_wrapper(LAYOUT_LAYER_NUMERAL),
   [LAYER_POINTER] = LAYOUT_wrapper(LAYOUT_LAYER_POINTER),
-  [LAYER_SYMBOLS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS),
+  [LAYER_NAVIGATION] = LAYOUT_wrapper(LAYOUT_LAYER_MACROS),
 };
 // clang-format on
+*/
 
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
@@ -270,7 +533,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void rgb_matrix_update_pwm_buffers(void);
 #endif
 
-uint8_t LAYER_COUNT = 8;
+uint8_t LAYER_COUNT = 5;
 bool SHIFT_PRESSED = false;
 bool WIN_PRESSED = false;
 bool CTRL_PRESSED = false;
@@ -323,11 +586,11 @@ handle_special_key_press(remoteHalfTouched[NUM_PINS-1], &WIN_PRESSED, KC_LGUI) ;
 
 //check the middle 3 for layer shifts;
 for(uint8_t i = 2; i < NUM_PINS - 1; i++) {
-    if (localHalfTouched[i] == 1 && (localHalfTouched[1] == 0)) {// the second parameter checks that the rest key is not pressed;
-        disable_all_layers_except(2 * i);
+    if (localHalfTouched[i] == 1 && (localHalfTouched[1] == 0)) {// the second parameter checks whether the rest key is not pressed;
+        disable_all_layers_except((2 * (i-2)));
         return true;
-    } else if (remoteHalfTouched[i] == 1 && (remoteHalfTouched[1] == 0)) {// the second parameter checks that the rest key is not pressed;
-        disable_all_layers_except(2 * i + 1);
+    } else if (remoteHalfTouched[i] == 1 && (remoteHalfTouched[1] == 0)) {// the second parameter checks whether the rest key is not pressed;
+        disable_all_layers_except((2 * (i-2)) + 1);
         return true;
     } else if (i == NUM_PINS - 2){
         disable_all_layers();

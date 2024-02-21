@@ -478,7 +478,7 @@ void housekeeping_task_kb(void) {
             //bool resultRecieved = transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), &remoteHalfTouched);
 
             //this if statement is required, otherwise the compiler strips out the transaction_rpc_recv call
-            if (transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), remoteHalfTouched)) {
+            if (transaction_rpc_recv(RPC_ID_READ_ALL_PINS, NUM_PINS * sizeof(uint8_t), &remoteHalfTouched)) {
                 rgb_matrix_set_color_all(RGB_GREEN);
                 //dprintf("success");
             }else{
