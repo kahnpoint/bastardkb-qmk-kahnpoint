@@ -174,12 +174,21 @@ static uint16_t auto_pointer_layer_timer = 0;
    _______________DEAD_FUNCTIONS_______________
 
 
-// layer 0 - letters
-#define LAYOUT_LAYER_BASE                                                                     \
-       KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, \
-       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L, KC_SEMICOLON, \
-       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,  KC_SPC, KC_BTN1,  KC_ESC, \
+// layer 0 - letters - qwerty;
+#define LAYOUT_LAYER_BASE                                                                              \
+       KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,     KC_P,         \
+       KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,     KC_SEMICOLON, \
+       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_SPC,  KC_BTN1,  KC_ESC,       \
                         _______________DEAD_FUNCTIONS_______________
+
+/*
+// layer 0 - letters - quoik;
+#define LAYOUT_LAYER_BASE                                                                           \
+       KC_Q,    KC_U,    KC_O,    KC_I,     KC_K,      KC_J,   KC_T,     KC_H,      KC_S,   KC_P,   \
+       KC_Y,    KC_A,    KC_E,    KC_BTN1,  KC_G,      KC_H,   KC_SPC,   KC_ENTER,  KC_L,   KC_W,   \
+       KC_Z,    KC_X,    KC_C,    KC_V,     KC_B,      KC_M,   KC_R,     KC_N,      KC_D,   KC_ESC, \
+                        _______________DEAD_FUNCTIONS_______________
+*/
 
 //layer 1 - numbers
 #define LAYOUT_LAYER_FUNCTIONS_AND_NUMBERS                                                   \
