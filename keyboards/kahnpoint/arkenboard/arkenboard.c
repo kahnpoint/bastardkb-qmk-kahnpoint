@@ -49,7 +49,7 @@ bool IS_KEYBOARD_MASTER;
 
 // Fixed DPI for drag-scroll.
 #    ifndef CHARYBDIS_DRAGSCROLL_DPI
-#        define CHARYBDIS_DRAGSCROLL_DPI 100
+#        define CHARYBDIS_DRAGSCROLL_DPI 200
 #    endif // CHARYBDIS_DRAGSCROLL_DPI
 
 #    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
@@ -349,7 +349,7 @@ void keyboard_post_init_kb(void) {
 //register the transaction handler for the readAllPins transaction
 transaction_register_rpc(RPC_ID_READ_ALL_PINS, read_all_pins_handler);
 transaction_register_rpc(RPC_ID_SEND_ALL_PINS, send_all_pins_handler);
-
+//transaction_register_rpc(RPC_ID_SET_REMOTE_MOUSE_CPI, set_remote_mouse_cpi_handler);
 
  //localHalfTouched={0,0,0,0,0,0};
  //remoteHalfTouched={0,0,0,0,0,0};
@@ -379,6 +379,7 @@ rgb_matrix_enable_noeeprom();
 
     if (data == 0 || data == 0xFF) {
     rgb_matrix_set_color_all(RGB_RED);
+    //dprintf("data is 0");
     }else if (data != EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {
     rgb_matrix_set_color_all(RGB_ORANGE);
     }else if (data == EXPECTED_CAPTOUCHWIRELING_FIRMWARE) {
@@ -465,7 +466,7 @@ void housekeeping_task_kb(void) {
         bool remote_needs_sync = false;
 
         // recieve from slave every 100ms regardless of state change.
-        if (timer_elapsed32(remote_last_sync) > 10) {
+        if (timer_elapsed32(remote_last_sync) > 20) {
             remote_needs_sync = true;
         }
 
@@ -506,7 +507,7 @@ void housekeeping_task_kb(void) {
         bool remote_local_needs_sync = false;
 
         // recieve from slave every 100ms regardless of state change.
-        if (timer_elapsed32(remote_local_last_sync) > 10) {
+        if (timer_elapsed32(remote_local_last_sync) > 20) {
             remote_local_needs_sync = true;
         }
 

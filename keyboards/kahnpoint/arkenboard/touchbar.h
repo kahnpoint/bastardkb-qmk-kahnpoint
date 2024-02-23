@@ -50,3 +50,6 @@ typedef struct _send_all_pins_slave_to_master_t {
 
 // Slave-side handler function for sendAllPins transaction
 void send_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data);
+
+//set slave mouse CPI
+//void set_remote_mouse_cpi_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data);

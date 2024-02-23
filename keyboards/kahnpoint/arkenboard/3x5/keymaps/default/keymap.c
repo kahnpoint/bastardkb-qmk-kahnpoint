@@ -520,9 +520,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_FUNCTIONS_AND_NUMBERS] = LAYOUT_wrapper(LAYOUT_LAYER_FUNCTIONS_AND_NUMBERS),
   [LAYER_SYMBOLS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS),
   //[LAYER_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_MEDIA),
-  [LAYER_MACROS] = LAYOUT_wrapper(LAYOUT_LAYER_MACROS),
   //[LAYER_NUMERAL] = LAYOUT_wrapper(LAYOUT_LAYER_NUMERAL),
   //[LAYER_POINTER] = LAYOUT_wrapper(LAYOUT_LAYER_POINTER),
+  [LAYER_MACROS] = LAYOUT_wrapper(LAYOUT_LAYER_MACROS),
   [LAYER_NAVIGATION_AND_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_NAVIGATION_AND_MEDIA),
 };
 
@@ -590,8 +590,13 @@ void disable_all_layers_except(uint8_t layer){
 }
 
 void disable_all_layers(void){
-    disable_all_layers_except(255);
+    disable_all_layers_except(0);
 }
+
+int VERY_HIGH_CPI = 2400;
+int HIGH_CPI = 1600;
+int MEDIUM_CPI = 1000;
+int LOW_CPI = 400;
 
 //example: handle_special_key_press(&localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
 void handle_special_key_press(uint8_t value, bool* status, enum qk_keycode_defines keycode) {
@@ -606,7 +611,14 @@ void handle_special_key_press(uint8_t value, bool* status, enum qk_keycode_defin
     }
 }
 
-
+void set_dragscroll_and_sniping(bool dragscroll, bool sniping){
+if(charybdis_get_pointer_dragscroll_enabled() != dragscroll){
+    charybdis_set_pointer_dragscroll_enabled(dragscroll);
+}
+if(charybdis_get_pointer_sniping_enabled() != sniping){
+    charybdis_set_pointer_sniping_enabled(sniping);
+}
+}
 
 bool handle_touch_layers_and_keys(void){
 //check the local first for shift;
@@ -621,21 +633,31 @@ handle_special_key_press(localHalfTouched[NUM_PINS-1], &ALT_PRESSED, KC_LALT) ;
 //check the remote last for win;
 handle_special_key_press(remoteHalfTouched[NUM_PINS-1], &WIN_PRESSED, KC_LGUI) ;
 
+// make sure the rest is not pressed;
+bool localIsNotRest = (localHalfTouched[1] != 1);
+bool remoteIsNotRest = (remoteHalfTouched[1] != 1);
 
-//check the middle 3 for layer shifts;
-for(uint8_t i = 2; i < NUM_PINS - 1; i++) {
-    if (localHalfTouched[i] == 1 && (localHalfTouched[1] == 0)) {// the second parameter checks whether the rest key is not pressed;
-        disable_all_layers_except((2 * (i-2)));
+// check the middle 2 for layer shifts;
+// there is one extra unused pin;
+for(uint8_t i = 2; i < 4; i++) {
+    if ((remoteHalfTouched[i] == 1) && remoteIsNotRest) {
+        disable_all_layers_except((2 * (i-2) + 1));
+        //kc_register_code(SNIPING);
+        set_dragscroll_and_sniping(true, false);
+        //pointing_device_set_cpi(LOW_CPI)
         return true;
-    } else if (remoteHalfTouched[i] == 1 && (remoteHalfTouched[1] == 0)) {// the second parameter checks whether the rest key is not pressed;
-        disable_all_layers_except((2 * (i-2)) + 1);
+    } else if ((localHalfTouched[i] == 1) && localIsNotRest) {
+        disable_all_layers_except((2 * (i-2)) + 2);
+        //kc_register_code(SNIPING);
+        set_dragscroll_and_sniping(false, true);
+        //pointing_device_set_cpi(HIGH_CPI);
         return true;
-    } else if (i == NUM_PINS - 1){
-        disable_all_layers();
-        return false;
     }
 }
 
+disable_all_layers();
+//kc_unregister_code(SNIPING);
+set_dragscroll_and_sniping(false, false);
 return false;
 }
 
@@ -701,49 +723,47 @@ bool set_layer_color_for_debugging( uint8_t value){
 
 for(int i = 0; i < NUM_PINS; i++){
     if (localHalfTouched[i] == 1){
-        int scaled_i = 2* i;
-        if(currentColorIndex != scaled_i){
+        int scaled_i = 2 * i;
+        //if(currentColorIndex != scaled_i){
             currentColorIndex = scaled_i;
-            rgb_matrix_set_color_all(rgb_colors[scaled_i][0], rgb_colors[scaled_i][1], rgb_colors[scaled_i][2]);
-
-        }
+            rgb_matrix_sethsv_noeeprom(hsv_colors[scaled_i][0], hsv_colors[scaled_i][1], hsv_colors[scaled_i][2]);
+        //}
         return true;
     }else if (remoteHalfTouched[i] == 1){
         int scaled_i = 2 * i + 1;
-        if(currentColorIndex != scaled_i){
+        //if(currentColorIndex != scaled_i){
             currentColorIndex = scaled_i;
-            rgb_matrix_set_color_all(rgb_colors[scaled_i][0], rgb_colors[scaled_i][1], rgb_colors[scaled_i][2]);
-        }
+            rgb_matrix_sethsv_noeeprom(hsv_colors[scaled_i][0], hsv_colors[scaled_i][1], hsv_colors[scaled_i][2]);
+        //}
         return true;
     }
 }
-rgb_matrix_set_color_all(RGB_BLACK);
+//rgb_matrix_set_color_all(RGB_BLACK);
+rgb_matrix_sethsv_noeeprom(0,0,64);
 return false;
 }
 
 
 void housekeeping_task_user(void) {
+//rgb_matrix_sethsv_noeeprom(0, 0, 64);
 //rgb_matrix_set_color_all(RGB_GREEN);
 
 //if any key is pressed, turn the lighs off
-if (any_key_pressed()) {
-    rgb_matrix_set_color_all(RGB_BLACK);
-}else{
+// if (any_key_pressed()) {
+//     rgb_matrix_set_color_all(RGB_BLACK);
+// }else{
 
 
 if(IS_KEYBOARD_MASTER){
-
+rgb_matrix_sethsv_noeeprom(0,0,64);
 //rgb_matrix_set_color_all(RGB_WHITE);
 
-// bool _set_layer_color = set_layer_color_for_debugging(64);
-// if (!_set_layer_color){
-//     //rgblight_sethsv(HSV_BLACK);
-//     dprintf("no layer touched\n");
-// }
-//handle_touch_layers_and_keys();
+//set_layer_color_for_debugging(255); // doesnt work for some reason;
+handle_touch_layers_and_keys();
 
 
 
+/*
 //left shift;
 if (localHalfTouched[0] == 1){
     rgb_matrix_set_color_all(RGB_ORANGE);
@@ -865,9 +885,12 @@ layer_off(4);
 layer_off(6);
 unregister_code(KC_LALT);
 }
+*/
+//}
 
-}
+}else{
 
+rgb_matrix_sethsv_noeeprom(0,0,64);
 }
 
 }

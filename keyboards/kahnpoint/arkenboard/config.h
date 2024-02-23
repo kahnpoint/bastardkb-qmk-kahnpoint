@@ -48,10 +48,13 @@
 // is slave side (not master side)
 //#ifndef IS_MASTER_SIDE
 
-   // #   define POINTING_DEVICE_INVERT_X_LEFT
+   #   define POINTING_DEVICE_INVERT_X_LEFT
     //#   define POINTING_DEVICE_INVERT_Y
 //    #   define CHARYBDIS_MINIMUM_DEFAULT_DPI 400
 //    #   define ROTATIONAL_TRANSFORM_ANGLE 75 //Trackball angle adjustment.
+
+//CHARYBDIS_DRAGSCROLL_REVERSE_X
+//CHARYBDIS_DRAGSCROLL_REVERSE_Y //mimic macos;
 
 //#endif
 

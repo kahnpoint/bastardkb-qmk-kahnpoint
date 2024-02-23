@@ -142,3 +142,9 @@ void send_all_pins_handler(uint8_t in_buflen, const void* in_data, uint8_t out_b
         memcpy(&remoteHalfTouched[0], in_data, NUM_PINS*sizeof(uint8_t));
     }
 }
+
+// void set_remote_mouse_cpi_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
+//     if (out_buflen == (NUM_PINS * sizeof(uint8_t))) {
+//         pointing_device_set_cpi(in_data);
+//     }
+// }
