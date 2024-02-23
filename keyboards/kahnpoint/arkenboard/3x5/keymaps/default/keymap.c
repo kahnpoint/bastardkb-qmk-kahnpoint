@@ -155,7 +155,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define ______________HOME_ROW_GACS_L______________ KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX
 #define ______________HOME_ROW_GACS_R______________ XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI
 #define _______________DEAD_FUNCTIONS_______________ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-#define _______________AUDIO_CONTROLS_______________ KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_AUDIO_VOL_UP,KC_AUDIO_VOL_DOWN
+#define _______________AUDIO_CONTROLS_______________ KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, KC_MEDIA_NEXT_TRACK
 
 #define _______________LEFT_BRACKETS_______________ KC_LEFT_CURLY_BRACE,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET,  KC_LEFT_BRACKET
 #define _______________RIGHT_BRACKETS_______________ KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET,  KC_RIGHT_BRACKET
