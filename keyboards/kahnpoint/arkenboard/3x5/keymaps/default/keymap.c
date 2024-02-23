@@ -271,7 +271,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case DOUBLE_COLON_MACRO:
             if (record->event.pressed) {
                 // when keycode DOUBLE_COLON_MACRO is pressed
-                SEND_STRING("::" SS_TAP(X_LEFT));
+                SEND_STRING("::");
             }
             break;
 case TURBOFISH_MACRO:
@@ -646,14 +646,13 @@ void handle_special_key_press(uint8_t value, bool* status, enum qk_keycode_defin
 }
 
 void set_dragscroll_and_sniping(bool dragscroll, bool sniping){
-/*
-if(charybdis_get_pointer_dragscroll_enabled() != dragscroll){
-    charybdis_set_pointer_dragscroll_enabled(dragscroll);
-}
-*/
-if(charybdis_get_pointer_sniping_enabled() != sniping){
-    charybdis_set_pointer_sniping_enabled(sniping);
-}
+    if(charybdis_get_pointer_dragscroll_enabled() != dragscroll){
+        charybdis_set_pointer_dragscroll_enabled(dragscroll);
+    }
+
+    if(charybdis_get_pointer_sniping_enabled() != sniping){
+        charybdis_set_pointer_sniping_enabled(sniping);
+    }
 }
 
 bool handle_touch_layers_and_keys(void){
