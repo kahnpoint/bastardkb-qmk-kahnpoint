@@ -69,7 +69,7 @@ typedef union {
 static charybdis_config_t g_charybdis_config = {0};
 
 /**
- * \brief Set the value of `config` from EEPROM.
+ * rief Set the value of `config` from EEPROM.
  *
  * Note that `is_dragscroll_enabled` and `is_sniping_enabled` are purposefully
  * ignored since we do not want to persist this state to memory.  In practice,
@@ -109,7 +109,7 @@ static void maybe_update_pointing_device_cpi(charybdis_config_t* config) {
     if (config->is_dragscroll_enabled) {
         pointing_device_set_cpi(CHARYBDIS_DRAGSCROLL_DPI);
     } else if (config->is_sniping_enabled) {
-        pointing_device_set_cpi(get_pointer_sniping_dpi(config));
+        (get_pointer_sniping_dpi(config));
     } else {
         pointing_device_set_cpi(get_pointer_default_dpi(config));
     }

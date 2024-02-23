@@ -109,9 +109,9 @@ bool any_key_pressed(void) {
 
 enum charybdis_keymap_layers {
     LAYER_BASE = 0, // qwerty
+    LAYER_SYMBOLS_AND_ARROWS,
     LAYER_FUNCTIONS_AND_NUMBERS, // function keys across top, number keys on middle row
-    LAYER_SYMBOLS,
-    LAYER_MACROS,
+    LAYER_NAVIGATION_AND_MACROS,
     LAYER_NAVIGATION_AND_MEDIA,
 };
 
@@ -133,7 +133,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 */
 
 // #define ESC_MED LT(LAYER_MEDIA, KC_ESC)
-// #define SPC_NAV LT(LAYER_SYMBOLS, KC_SPC)
+// #define SPC_NAV LT(LAYER_SYMBOLS_AND_ARROWS, KC_SPC)
 // #define TAB_FUN LT(LAYER_FUNCTION, KC_TAB)
 // #define ENT_SYM LT(LAYER_NAVIGATION, KC_ENT)
 // #define BSP_NUM LT(LAYER_NUMERAL, KC_BSPC)
@@ -162,7 +162,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define _______________BRACKET_MACROS_______________ CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO,  SQUARE_BRACKETS_MACRO
 #define _______________QUOTE_MACROS_______________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
 
-#define _______________SETTINGS_CONTROLS_______________ CTRL_ALT_DEL_MACRO, KC_BRIGHTNESS_UP, KC_BRIGHTNESS_DOWN, _______, _______
+#define _______________SETTINGS_CONTROLS_______________ CTRL_ALT_DEL_MACRO, _______, EMOJI_MACRO, KC_BRIGHTNESS_UP, KC_BRIGHTNESS_DOWN
 #define _______________BROWSER_CONTROLS_______________  KC_WWW_HOME, KC_WWW_BACK, KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
 #define _______________APPLICATIONS_______________      KC_MAIL, KC_CALCULATOR, KC_MY_COMPUTER, KC_CONTROL_PANEL, KC_ASSISTANT
 
@@ -190,25 +190,26 @@ static uint16_t auto_pointer_layer_timer = 0;
                         _______________DEAD_FUNCTIONS_______________
 */
 
-//layer 1 - numbers
+//layer 1 - symbols
+#define LAYOUT_LAYER_SYMBOLS_AND_ARROWS                                                               \
+    KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE, KC_PIPE, \
+    KC_PLUS, KC_EQUAL, KC_BACKSPACE, KC_DELETE, KC_COLON,      KC_QUESTION, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \
+    KC_MINUS,  _______________LEFT_BRACKETS_______________,     KC_BACKSLASH, KC_SLASH, KC_COMMA, KC_DOT,  KC_ESC, \
+                                _______________DEAD_FUNCTIONS_______________
+
+
+//layer 2 - numbers
 #define LAYOUT_LAYER_FUNCTIONS_AND_NUMBERS                                                   \
     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,               KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, \
     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,   KC_0, \
-    KC_TILDE,  _______________LEFT_BRACKETS_______________,  KC_F11,  KC_F12, KC_ENTER,  KC_BTN2,  KC_ESC, \
+    KC_TILDE,  _______________RIGHT_BRACKETS_______________,  KC_F11,  KC_F12, KC_ENTER,  KC_BTN2,  KC_ESC, \
                                   _______________DEAD_FUNCTIONS_______________
 
-//layer 2 - symbols
-#define LAYOUT_LAYER_SYMBOLS                                                               \
-    KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE, KC_PIPE, \
-    KC_PLUS, KC_EQUAL, KC_BACKSPACE, KC_DELETE, KC_COLON,      KC_INSERT, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \
-    KC_MINUS,  _______________RIGHT_BRACKETS_______________,     KC_BACKSLASH, KC_SLASH, KC_COMMA, KC_DOT,  KC_ESC, \
-                                _______________DEAD_FUNCTIONS_______________
-
 //layer 3 - macros
-#define LAYOUT_LAYER_MACROS                                                           \
-    KC_QUESTION,   _______________QUOTE_MACROS_______________,                               _______, _______, _______, _______, EMOJI_MACRO, \
-    TURBOFISH_MACRO,    KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE, DOUBLE_COLON_MACRO,             HTML_COMMENT_MACRO, KC_HOME, KC_PGDN,   KC_PGUP, KC_END, \
-    HELLO_WORLD_MACRO, _______________BRACKET_MACROS_______________,                         JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC, \
+#define LAYOUT_LAYER_NAVIGATION_AND_MACROS \
+    HTML_COMMENT_MACRO,   _______________QUOTE_MACROS_______________,                                KC_HOME, CTRL_PGDOWN_MACRO, CTRL_SHIFT_TAB_MACRO, CTRL_TAB_MACRO, CTRL_PGUP_MACRO, \
+    TURBOFISH_MACRO,    KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE, DOUBLE_COLON_MACRO,            KC_END, KC_PGDN, KC_MS_WH_DOWN, KC_MS_WH_UP,  KC_PGUP, \
+    HELLO_WORLD_MACRO, _______________BRACKET_MACROS_______________,                        JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC, \
                         _______________DEAD_FUNCTIONS_______________
 
 
@@ -218,7 +219,6 @@ static uint16_t auto_pointer_layer_timer = 0;
     _______________BROWSER_CONTROLS_______________,   KC_PRINT_SCREEN, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_UP_MACRO, WIN_RIGHT_MACRO, \
     _______________APPLICATIONS_______________,   ALT_TAB_MACRO, SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT, KC_ESC, \
    _______________DEAD_FUNCTIONS_______________
-
 
 
 
@@ -360,13 +360,38 @@ case TURBOFISH_MACRO:
         SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_DOT) SS_UP(X_LGUI));
       }
       break;
+    case CTRL_PGUP_MACRO:
+    if (record->event.pressed) {
+        // when keycode CTRL_PGUP_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_PGUP) SS_UP(X_LCTL));
+    }
+    break;
+    case CTRL_PGDOWN_MACRO:
+    if (record->event.pressed) {
+        // when keycode CTRL_PGDOWN_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_PGDN) SS_UP(X_LCTL));
+    }
+    break;
+    case CTRL_TAB_MACRO:
+    if (record->event.pressed) {
+        // when keycode CTRL_TAB_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_TAB) SS_UP(X_LCTL));
+    }
+    break;
+    case CTRL_SHIFT_TAB_MACRO:
+    if (record->event.pressed) {
+        // when keycode CTRL_SHIFT_TAB_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LSFT) SS_TAP(X_TAB) SS_UP(X_LSFT) SS_UP(X_LCTL));
+    }
+    break;
+
   }
 
   return true;
 }
 
 /*
-#define LAYOUT_LAYER_SYMBOLS                                                               \
+#define LAYOUT_LAYER_SYMBOLS_AND_ARROWS                                                               \
     _______________DEAD_HALF_ROW_______________, _______________DEAD_HALF_ROW_______________, \
     ______________HOME_ROW_GACS_L______________, KC_CAPS, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, \
     _______________DEAD_HALF_ROW_______________,  KC_INS, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, \
@@ -428,7 +453,7 @@ KC_DOUBLE_QUOTE 	KC_DQUO, KC_DQT 	"
  * `KC_RPRN`.
  */
 /*
-#define LAYOUT_LAYER_MACROS                                                                  \
+#define LAYOUT_LAYER_NAVIGATION_AND_MACROS                                                                  \
     KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR, _______________DEAD_HALF_ROW_______________, \
     KC_COLN,  KC_DLR, KC_PERC, KC_CIRC, KC_PLUS, ______________HOME_ROW_GACS_R______________, \
     KC_TILD, KC_EXLM,   KC_AT, KC_HASH, KC_PIPE, _______________DEAD_HALF_ROW_______________, \
@@ -526,12 +551,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //POINTER_MOD(HOME_ROW_MOD_GACS(LAYOUT_LAYER_BASE))
     LAYOUT_LAYER_BASE
   ),
+  [LAYER_SYMBOLS_AND_ARROWS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS_AND_ARROWS),
   [LAYER_FUNCTIONS_AND_NUMBERS] = LAYOUT_wrapper(LAYOUT_LAYER_FUNCTIONS_AND_NUMBERS),
-  [LAYER_SYMBOLS] = LAYOUT_wrapper(LAYOUT_LAYER_SYMBOLS),
   //[LAYER_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_MEDIA),
   //[LAYER_NUMERAL] = LAYOUT_wrapper(LAYOUT_LAYER_NUMERAL),
   //[LAYER_POINTER] = LAYOUT_wrapper(LAYOUT_LAYER_POINTER),
-  [LAYER_MACROS] = LAYOUT_wrapper(LAYOUT_LAYER_MACROS),
+  [LAYER_NAVIGATION_AND_MACROS] = LAYOUT_wrapper(LAYOUT_LAYER_NAVIGATION_AND_MACROS),
   [LAYER_NAVIGATION_AND_MEDIA] = LAYOUT_wrapper(LAYOUT_LAYER_NAVIGATION_AND_MEDIA),
 };
 
@@ -621,9 +646,11 @@ void handle_special_key_press(uint8_t value, bool* status, enum qk_keycode_defin
 }
 
 void set_dragscroll_and_sniping(bool dragscroll, bool sniping){
+/*
 if(charybdis_get_pointer_dragscroll_enabled() != dragscroll){
     charybdis_set_pointer_dragscroll_enabled(dragscroll);
 }
+*/
 if(charybdis_get_pointer_sniping_enabled() != sniping){
     charybdis_set_pointer_sniping_enabled(sniping);
 }
@@ -636,29 +663,24 @@ handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
 //check the remote first for ctrl;
 handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
 
-//check the local last for alt;
-handle_special_key_press(localHalfTouched[NUM_PINS-1], &ALT_PRESSED, KC_LALT) ;
-
-//check the remote last for win;
-handle_special_key_press(remoteHalfTouched[NUM_PINS-1], &WIN_PRESSED, KC_LGUI) ;
 
 // make sure the rest is not pressed;
-bool localIsNotRest = (localHalfTouched[1] != 1);
-bool remoteIsNotRest = (remoteHalfTouched[1] != 1);
+//bool localIsNotRest = (localHalfTouched[1] != 1);
+//bool remoteIsNotRest = (remoteHalfTouched[1] != 1);
 
 // check the middle 2 for layer shifts;
 // there is one extra unused pin;
-for(uint8_t i = 2; i < 4; i++) {
-    if ((remoteHalfTouched[i] == 1) && remoteIsNotRest) {
-        disable_all_layers_except((2 * (i-2) + 1));
+for(uint8_t i = 1; i < 3; i++) {
+    if ((remoteHalfTouched[i] == 1)) {
+        disable_all_layers_except((2 * (i-1) + 1));
         //kc_register_code(SNIPING);
-        set_dragscroll_and_sniping(true, false);
+        set_dragscroll_and_sniping(true, true);
         //pointing_device_set_cpi(LOW_CPI)
         return true;
-    } else if ((localHalfTouched[i] == 1) && localIsNotRest) {
-        disable_all_layers_except((2 * (i-2)) + 2);
+    } else if ((localHalfTouched[i] == 1)) {
+        disable_all_layers_except((2 * (i-1)) + 2);
         //kc_register_code(SNIPING);
-        set_dragscroll_and_sniping(false, true);
+        set_dragscroll_and_sniping(true, true);
         //pointing_device_set_cpi(HIGH_CPI);
         return true;
     }
@@ -667,6 +689,15 @@ for(uint8_t i = 2; i < 4; i++) {
 disable_all_layers();
 //kc_unregister_code(SNIPING);
 set_dragscroll_and_sniping(false, false);
+
+
+//check the local last for alt;
+handle_special_key_press(localHalfTouched[4], &ALT_PRESSED, KC_LALT) ;
+
+//check the remote last for win;
+handle_special_key_press(remoteHalfTouched[4], &WIN_PRESSED, KC_LGUI) ;
+
+
 return false;
 }
 
