@@ -315,7 +315,7 @@ case TURBOFISH_MACRO:
     case WIN_RIGHT_MACRO:
       if (record->event.pressed) {
         // when keycode WIN_RIGHT_MACRO is pressed
-        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_LEFT) SS_UP(X_LGUI));
+        SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_RIGHT) SS_UP(X_LGUI));
       }
       break;
     case WIN_UP_MACRO:
@@ -669,15 +669,16 @@ handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
 
 // check the middle 2 for layer shifts;
 // there is one extra unused pin;
-for(uint8_t i = 1; i < 3; i++) {
+int LAYER_START_PIN = 1;
+for(uint8_t i = LAYER_START_PIN; i < LAYER_START_PIN + 2; i++) {
     if ((remoteHalfTouched[i] == 1)) {
-        disable_all_layers_except((2 * (i-1) + 1));
+        disable_all_layers_except((2 * (i-LAYER_START_PIN) + 1));
         //kc_register_code(SNIPING);
         set_dragscroll_and_sniping(true, true);
         //pointing_device_set_cpi(LOW_CPI)
         return true;
     } else if ((localHalfTouched[i] == 1)) {
-        disable_all_layers_except((2 * (i-1)) + 2);
+        disable_all_layers_except((2 * (i-LAYER_START_PIN)) + 2);
         //kc_register_code(SNIPING);
         set_dragscroll_and_sniping(true, true);
         //pointing_device_set_cpi(HIGH_CPI);
@@ -691,10 +692,10 @@ set_dragscroll_and_sniping(false, false);
 
 
 //check the local last for alt;
-handle_special_key_press(localHalfTouched[4], &ALT_PRESSED, KC_LALT) ;
+handle_special_key_press(localHalfTouched[NUM_PINS - 1], &ALT_PRESSED, KC_LALT) ;
 
 //check the remote last for win;
-handle_special_key_press(remoteHalfTouched[4], &WIN_PRESSED, KC_LGUI) ;
+handle_special_key_press(remoteHalfTouched[NUM_PINS - 1], &WIN_PRESSED, KC_LGUI) ;
 
 
 return false;
