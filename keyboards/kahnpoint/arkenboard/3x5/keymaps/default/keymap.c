@@ -152,19 +152,19 @@ static uint16_t auto_pointer_layer_timer = 0;
 // 3 wide
 #define ___________SINGLE_QUOTES__________ KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE
 #define ___________DELETE_MACROS__________ CTRL_BACKSPACE_MACRO, KC_BACKSPACE, KC_DELETE
+
 // 4 wide
-#define ______________BROWSER_CONTROLS____________  KC_WWW_REFRESH, KC_WWW_BACK,    KC_WWW_FORWARD, KC_WWW_SEARCH
+#define ______________BROWSER_CONTROLS____________  KC_WWW_BACK,    KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
 //#define ______________APPLICATIONS________________   KC_CALCULATOR,  KC_MY_COMPUTER, KC_CONTROL_PANEL, KC_ASSISTANT
 #define ______________WINDOW_SNAPPING_____________   WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_UP_MACRO, WIN_RIGHT_MACRO
 #define ______________PAGE_NAVIGATION_____________   KC_PGDN,  KC_MS_WH_DOWN, KC_MS_WH_UP,  KC_PGUP
-#define ______________LEFT_BRACKETS_______________   KC_LEFT_CURLY_BRACE,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET,  KC_LEFT_BRACKET
-#define ______________RIGHT_BRACKETS______________   KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET,  KC_RIGHT_BRACKET
-#define ______________BRACKET_MACROS______________   CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO,  SQUARE_BRACKETS_MACRO
+#define ______________LEFT_BRACKETS_______________   KC_LEFT_BRACKET, KC_LEFT_CURLY_BRACE,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET
+#define ______________RIGHT_BRACKETS______________   KC_RIGHT_BRACKET, KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET
+#define ______________BRACKET_MACROS______________   SQUARE_BRACKETS_MACRO, CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO
 #define ______________ARROW_KEYS__________________   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
-#define ______________ALT_TAB_MACROS______________   ALT_TAB_MACRO, SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT
+#define ______________ALT_TAB_MACROS______________   SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT, ALT_TAB_MACRO
 #define ______________TAB_SWITCHING_MACROS________   CTRL_PGDOWN_MACRO, CTRL_SHIFT_TAB_MACRO, CTRL_TAB_MACRO, CTRL_PGUP_MACRO
 #define ______________QUOTE_MACROS________________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
-
 
 // 5 wide
 #define ________________DEAD_HALF_ROW____________________   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
@@ -173,15 +173,12 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define ________________SETTINGS_CONTROLS________________   CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_BRIGHTNESS_UP, KC_BRIGHTNESS_DOWN
 #define ________________AUDIO_CONTROLS___________________   KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, KC_MEDIA_NEXT_TRACK
 
-
 // 10 wide
 #define ______________________________________________NUMBER_ROW_________________________________________________   KC_0, KC_1,    KC_2,    KC_3,    KC_4,           KC_5,  KC_6,    KC_7,    KC_8,    KC_9
 #define ______________________________________________FUNCTION_ROW_______________________________________________   KC_F10, KC_F1,   KC_F2,   KC_F3,   KC_F4,         KC_F5, KC_F6,   KC_F7,   KC_F8,   KC_F9
 #define ______________________________________________NUMBER_SYMBOLS_____________________________________________   KC_QUESTION, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE,   KC_PIPE
 #define ______________________________________________DEAD_FULL_ROW______________________________________________   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 #define ______________________________________________TRNS_FULL_ROW______________________________________________   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
-
-
 
 #define LAYOUT_LAYER_BLANK \
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -206,33 +203,34 @@ static uint16_t auto_pointer_layer_timer = 0;
                         ________________DEAD_FUNCTIONS___________________
 */
 
+
+
 //layer left.1 - numbers
 #define LAYOUT_LAYER_NUMBERS_AND_ARROWS \
-    ______________________________________________NUMBER_ROW_________________________________________________,            \
-    ______________WINDOW_SNAPPING_____________, WIN_TAB_MACRO,    KC_HOME, ______________ARROW_KEYS__________________, \
-    KC_TILDE,  ______________LEFT_BRACKETS_______________,        KC_END,  KC_ENTER,  KC_TAB,  KC_BTN2,  KC_ESC,         \
+    ______________________________________________NUMBER_ROW_________________________________________________,         \
+    ______________TAB_SWITCHING_MACROS________, WIN_TAB_MACRO,    KC_HOME, ______________ARROW_KEYS__________________,  \
+     ______________LEFT_BRACKETS_______________, KC_TILDE,        KC_END,  KC_ENTER,  KC_TAB,  KC_BTN2,  KC_ESC,         \
     ________________DEAD_FUNCTIONS___________________
 
 //layer left.2 - navigation/media
 #define LAYOUT_LAYER_MEDIA_AND_ARROWS \
-    ________________SETTINGS_CONTROLS________________,               ________________AUDIO_CONTROLS___________________,   \
-    ______________ALT_TAB_MACROS______________, KC_MY_COMPUTER,      KC_HOME, ______________ARROW_KEYS__________________, \
-    ______________BROWSER_CONTROLS____________, KC_CALCULATOR,    KC_END, KC_ENTER,  KC_TAB,  KC_BTN3,  KC_ESC,          \
+    ______________________________________________FUNCTION_ROW_______________________________________________,  \
+    KC_F11, ______________ALT_TAB_MACROS______________,    KC_HOME, ______________WINDOW_SNAPPING_____________,  \
+    KC_F12, ______________BROWSER_CONTROLS____________,    KC_END, KC_ENTER,  KC_TAB,  KC_BTN3,  KC_ESC,          \
     ________________DEAD_FUNCTIONS___________________
 
 //layer right.1 - symbols
 #define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
-    ______________________________________________NUMBER_SYMBOLS_____________________________________________,              \
-    KC_PLUS,  ___________SINGLE_QUOTES__________, KC_EQUAL,     KC_EXCLAIM, ___________DELETE_MACROS__________,  KC_COLON, \
-    KC_MINUS, ______________RIGHT_BRACKETS______________,       KC_BACKSLASH,  KC_SLASH,  KC_COMMA,  KC_DOT,  KC_ESC,       \
+    ______________________________________________NUMBER_SYMBOLS_____________________________________________,             \
+    ___________SINGLE_QUOTES__________, KC_EQUAL, KC_PLUS,     KC_EXCLAIM, ___________DELETE_MACROS__________,  KC_COLON,  \
+    ______________RIGHT_BRACKETS______________, KC_MINUS,      KC_BACKSLASH,  KC_SLASH,  KC_COMMA,  KC_DOT,  KC_ESC,        \
     ________________DEAD_FUNCTIONS___________________
-
 
 //layer right.2 - macros
 #define LAYOUT_LAYER_MACROS_AND_FUNCTIONS_AND_DELETE \
-    ______________________________________________FUNCTION_ROW_______________________________________________,                              \
-    KC_F11, ______________QUOTE_MACROS________________,       HTML_COMMENT_MACRO, ___________DELETE_MACROS__________, DOUBLE_COLON_MACRO, \
-    KC_F12, ______________BRACKET_MACROS______________,       JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC,  \
+    ________________SETTINGS_CONTROLS________________,                 ________________AUDIO_CONTROLS___________________,                          \
+    ______________QUOTE_MACROS________________, KC_CALCULATOR,         HTML_COMMENT_MACRO, ___________DELETE_MACROS__________, DOUBLE_COLON_MACRO,  \
+    ______________BRACKET_MACROS______________, KC_MY_COMPUTER,        JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC,   \
     ________________DEAD_FUNCTIONS___________________
 
 
@@ -404,11 +402,13 @@ case TURBOFISH_MACRO:
         // when keycode CTRL_BACKSPACE_MACRO is pressed
         SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_BSPC) SS_UP(X_LCTL));
     }
+    break;
     case WIN_TAB_MACRO:
     if (record->event.pressed) {
         // when keycode WIN_TAB_MACRO is pressed
         SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_TAB) SS_UP(X_LGUI));
     }
+    break;
 
   }
 
@@ -681,49 +681,51 @@ void set_dragscroll_and_sniping(bool dragscroll, bool sniping){
 }
 
 bool handle_touch_layers_and_keys(void){
-//check the local first for shift;
-handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+    //check the local first for shift;
+    //handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+    handle_special_key_press(localHalfTouched[0], &CTRL_PRESSED, KC_LCTL);
 
-//check the remote first for ctrl;
-handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
+    //check the remote first for ctrl;
+    //handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
+    handle_special_key_press(remoteHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
 
 
-// make sure the rest is not pressed;
-//bool localIsNotRest = (localHalfTouched[1] != 1);
-//bool remoteIsNotRest = (remoteHalfTouched[1] != 1);
+    // make sure the rest is not pressed;
+    //bool localIsNotRest = (localHalfTouched[1] != 1);
+    //bool remoteIsNotRest = (remoteHalfTouched[1] != 1);
 
-// check the middle 2 for layer shifts;
-// there is one extra unused pin;
-int LAYER_START_PIN = 1;
-for(uint8_t i = LAYER_START_PIN; i < LAYER_START_PIN + 2; i++) {
-    if ((remoteHalfTouched[i] == 1)) {
-        disable_all_layers_except((2 * (i-LAYER_START_PIN) + 1));
-        //kc_register_code(SNIPING);
-        set_dragscroll_and_sniping(true, true);
-        //pointing_device_set_cpi(LOW_CPI)
-        return true;
-    } else if ((localHalfTouched[i] == 1)) {
-        disable_all_layers_except((2 * (i-LAYER_START_PIN)) + 2);
-        //kc_register_code(SNIPING);
-        set_dragscroll_and_sniping(true, true);
-        //pointing_device_set_cpi(HIGH_CPI);
-        return true;
+    // check the middle 2 for layer shifts;
+    // there is one extra unused pin;
+    int LAYER_START_PIN = 1;
+    for(uint8_t i = LAYER_START_PIN; i < LAYER_START_PIN + 2; i++) {
+        if ((remoteHalfTouched[i] == 1)) {
+            disable_all_layers_except((2 * (i-LAYER_START_PIN) + 1));
+            //kc_register_code(SNIPING);
+            set_dragscroll_and_sniping(true, true);
+            //pointing_device_set_cpi(LOW_CPI)
+            return true;
+        } else if ((localHalfTouched[i] == 1)) {
+            disable_all_layers_except((2 * (i-LAYER_START_PIN)) + 2);
+            //kc_register_code(SNIPING);
+            set_dragscroll_and_sniping(true, true);
+            //pointing_device_set_cpi(HIGH_CPI);
+            return true;
+        }
     }
-}
 
-disable_all_layers();
-//kc_unregister_code(SNIPING);
-set_dragscroll_and_sniping(false, false);
-
-
-//check the local last for alt;
-handle_special_key_press(localHalfTouched[NUM_PINS - 1], &ALT_PRESSED, KC_LALT) ;
-
-//check the remote last for win;
-handle_special_key_press(remoteHalfTouched[NUM_PINS - 1], &WIN_PRESSED, KC_LGUI) ;
+    disable_all_layers();
+    //kc_unregister_code(SNIPING);
+    set_dragscroll_and_sniping(false, false);
 
 
-return false;
+    //check the local last for alt;
+    handle_special_key_press(localHalfTouched[NUM_PINS - 1], &ALT_PRESSED, KC_LALT) ;
+
+    //check the remote last for win;
+    handle_special_key_press(remoteHalfTouched[NUM_PINS - 1], &WIN_PRESSED, KC_LGUI) ;
+
+
+    return false;
 }
 
 /*
