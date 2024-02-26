@@ -42,7 +42,7 @@
     //#   define POINTING_DEVICE_INVERT_Y
     #   define CHARYBDIS_MINIMUM_DEFAULT_DPI 1600
     #   define ROTATIONAL_TRANSFORM_ANGLE -75 //Trackball angle adjustment.
-
+    #   define CHARYBDIS_MINIMUM_SNIPING_DPI 400
 //#endif
 
 // is slave side (not master side)
