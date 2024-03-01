@@ -151,7 +151,8 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 // 3 wide
 #define ___________SINGLE_QUOTES__________ KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE
-#define ___________DELETE_MACROS__________ CTRL_BACKSPACE_MACRO, KC_BACKSPACE, KC_DELETE
+//#define ___________DELETE_MACROS__________ CTRL_BACKSPACE_MACRO, KC_BACKSPACE, KC_DELETE
+#define ___________BROWSER_CONTROLS_______  KC_WWW_SEARCH, KC_WWW_BACK, KC_WWW_FORWARD
 
 // 4 wide
 #define ______________BROWSER_CONTROLS____________  KC_WWW_BACK,    KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
@@ -162,8 +163,8 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define ______________RIGHT_BRACKETS______________   KC_RIGHT_BRACKET, KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET
 #define ______________BRACKET_MACROS______________   SQUARE_BRACKETS_MACRO, CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO
 #define ______________ARROW_KEYS__________________   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
-#define ______________ALT_TAB_MACROS______________   SHIFT_TAB_MACRO, KC_TAB, KC_LEFT_ALT, ALT_TAB_MACRO
-#define ______________TAB_SWITCHING_MACROS________   CTRL_PGDOWN_MACRO, CTRL_SHIFT_TAB_MACRO, CTRL_TAB_MACRO, CTRL_PGUP_MACRO
+#define ______________ALT_TAB_MACROS______________   SHIFT_TAB_MACRO, KC_LEFT_ALT, KC_TAB, ALT_TAB_MACRO
+#define ______________TAB_SWITCHING_MACROS________   CTRL_PGUP_MACRO, CTRL_SHIFT_TAB_MACRO, CTRL_TAB_MACRO, CTRL_PGDOWN_MACRO
 #define ______________QUOTE_MACROS________________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
 
 // 5 wide
@@ -176,7 +177,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 // 10 wide
 #define ______________________________________________NUMBER_ROW_________________________________________________   KC_0, KC_1,    KC_2,    KC_3,    KC_4,           KC_5,  KC_6,    KC_7,    KC_8,    KC_9
 #define ______________________________________________FUNCTION_ROW_______________________________________________   KC_F10, KC_F1,   KC_F2,   KC_F3,   KC_F4,         KC_F5, KC_F6,   KC_F7,   KC_F8,   KC_F9
-#define ______________________________________________NUMBER_SYMBOLS_____________________________________________   KC_QUESTION, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE,   KC_PIPE
+#define ______________________________________________NUMBER_SYMBOLS_____________________________________________   KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE,   KC_PIPE
 #define ______________________________________________DEAD_FULL_ROW______________________________________________   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 #define ______________________________________________TRNS_FULL_ROW______________________________________________   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 
@@ -215,21 +216,21 @@ static uint16_t auto_pointer_layer_timer = 0;
 //layer left.2 - navigation/media
 #define LAYOUT_LAYER_MEDIA_AND_ARROWS \
     ______________________________________________FUNCTION_ROW_______________________________________________,  \
-    KC_F11, ______________ALT_TAB_MACROS______________,    KC_HOME, ______________WINDOW_SNAPPING_____________,  \
-    KC_F12, ______________BROWSER_CONTROLS____________,    KC_END, KC_ENTER,  KC_TAB,  KC_BTN3,  KC_ESC,          \
+    ______________WINDOW_SNAPPING_____________, KC_F11,    KC_HOME, ______________PAGE_NAVIGATION_____________,  \
+    ______________ALT_TAB_MACROS______________, KC_F12,    KC_END, KC_ENTER,  KC_TAB,  KC_BTN3,  KC_ESC,          \
     ________________DEAD_FUNCTIONS___________________
 
 //layer right.1 - symbols
 #define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
     ______________________________________________NUMBER_SYMBOLS_____________________________________________,             \
-    ___________SINGLE_QUOTES__________, KC_EQUAL, KC_PLUS,     KC_EXCLAIM, ___________DELETE_MACROS__________,  KC_COLON,  \
+    ___________SINGLE_QUOTES__________, KC_EQUAL, KC_PLUS,     KC_QUESTION,   KC_ENTER,  KC_BACKSPACE, KC_DELETE,  KC_COLON,  \
     ______________RIGHT_BRACKETS______________, KC_MINUS,      KC_BACKSLASH,  KC_SLASH,  KC_COMMA,  KC_DOT,  KC_ESC,        \
     ________________DEAD_FUNCTIONS___________________
 
 //layer right.2 - macros
 #define LAYOUT_LAYER_MACROS_AND_FUNCTIONS_AND_DELETE \
     ________________SETTINGS_CONTROLS________________,                 ________________AUDIO_CONTROLS___________________,                          \
-    ______________QUOTE_MACROS________________, KC_CALCULATOR,         HTML_COMMENT_MACRO, ___________DELETE_MACROS__________, DOUBLE_COLON_MACRO,  \
+    ______________QUOTE_MACROS________________, KC_CALCULATOR,         HTML_COMMENT_MACRO, ___________BROWSER_CONTROLS_______, DOUBLE_COLON_MACRO,  \
     ______________BRACKET_MACROS______________, KC_MY_COMPUTER,        JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC,   \
     ________________DEAD_FUNCTIONS___________________
 
@@ -302,7 +303,7 @@ case TURBOFISH_MACRO:
     case JS_COMMENT_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_COMMENT_MACRO is pressed
-                SEND_STRING("//" SS_TAP(X_LEFT));
+                SEND_STRING("//");
             }
             break;
     case JS_DOC_MULTILINE_COMMENT_MACRO:
@@ -682,12 +683,12 @@ void set_dragscroll_and_sniping(bool dragscroll, bool sniping){
 
 bool handle_touch_layers_and_keys(void){
     //check the local first for shift;
-    //handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
-    handle_special_key_press(localHalfTouched[0], &CTRL_PRESSED, KC_LCTL);
+    handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+    //handle_special_key_press(localHalfTouched[0], &CTRL_PRESSED, KC_LCTL);
 
     //check the remote first for ctrl;
-    //handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
-    handle_special_key_press(remoteHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+    handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
+    //handle_special_key_press(remoteHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
 
 
     // make sure the rest is not pressed;
