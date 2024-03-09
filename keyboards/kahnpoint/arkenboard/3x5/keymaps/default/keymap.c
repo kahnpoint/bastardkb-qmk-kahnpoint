@@ -151,8 +151,9 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 // 3 wide
 #define ___________SINGLE_QUOTES__________ KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE
-//#define ___________DELETE_MACROS__________ CTRL_BACKSPACE_MACRO, KC_BACKSPACE, KC_DELETE
+#define ___________DELETE_MACROS__________ CTRL_BACKSPACE_MACRO, KC_BACKSPACE, KC_DELETE
 #define ___________BROWSER_CONTROLS_______  KC_WWW_SEARCH, KC_WWW_BACK, KC_WWW_FORWARD
+#define ___________JS_MACROS______________ JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, JS_GRAVE_OBJECT_MACRO
 
 // 4 wide
 #define ______________BROWSER_CONTROLS____________  KC_WWW_BACK,    KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
@@ -217,13 +218,13 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define LAYOUT_LAYER_MEDIA_AND_ARROWS \
     ______________________________________________FUNCTION_ROW_______________________________________________,  \
     ______________WINDOW_SNAPPING_____________, KC_F11,    KC_HOME, ______________PAGE_NAVIGATION_____________,  \
-    ______________ALT_TAB_MACROS______________, KC_F12,    KC_END, KC_ENTER,  KC_TAB,  KC_BTN3,  KC_ESC,          \
+    ______________ALT_TAB_MACROS______________, KC_F12,    KC_END, KC_ENTER, KC_TAB, KC_BTN3, KC_ESC,          \
     ________________DEAD_FUNCTIONS___________________
 
 //layer right.1 - symbols
 #define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
     ______________________________________________NUMBER_SYMBOLS_____________________________________________,             \
-    ___________SINGLE_QUOTES__________, KC_EQUAL, KC_PLUS,     KC_QUESTION,   KC_ENTER,  KC_BACKSPACE, KC_DELETE,  KC_COLON,  \
+    ___________SINGLE_QUOTES__________, KC_EQUAL, KC_PLUS,     KC_QUESTION,   ___________DELETE_MACROS__________,  KC_COLON,  \
     ______________RIGHT_BRACKETS______________, KC_MINUS,      KC_BACKSLASH,  KC_SLASH,  KC_COMMA,  KC_DOT,  KC_ESC,        \
     ________________DEAD_FUNCTIONS___________________
 
@@ -231,7 +232,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define LAYOUT_LAYER_MACROS_AND_FUNCTIONS_AND_DELETE \
     ________________SETTINGS_CONTROLS________________,                 ________________AUDIO_CONTROLS___________________,                          \
     ______________QUOTE_MACROS________________, KC_CALCULATOR,         HTML_COMMENT_MACRO, ___________BROWSER_CONTROLS_______, DOUBLE_COLON_MACRO,  \
-    ______________BRACKET_MACROS______________, KC_MY_COMPUTER,        JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, KC_TAB, KC_BTN3,  KC_ESC,   \
+    ______________BRACKET_MACROS______________, KC_MY_COMPUTER,        ___________JS_MACROS______________, _______,  KC_ESC,   \
     ________________DEAD_FUNCTIONS___________________
 
 
@@ -303,7 +304,7 @@ case TURBOFISH_MACRO:
     case JS_COMMENT_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_COMMENT_MACRO is pressed
-                SEND_STRING("//");
+                SEND_STRING("// ");
             }
             break;
     case JS_DOC_MULTILINE_COMMENT_MACRO:
@@ -311,6 +312,12 @@ case TURBOFISH_MACRO:
                 // when keycode JS_DOC_MULTILINE_COMMENT_MACRO is pressed
                 //create the string, go back 3 and hit enter;
                 SEND_STRING("/**  */" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER));
+            }
+            break;
+    case JS_GRAVE_OBJECT_MACRO:
+            if (record->event.pressed) {
+                // when keycode JS_GRAVE_OBJECT_MACRO is pressed
+                SEND_STRING("${}" SS_TAP(X_LEFT));
             }
             break;
     case PYTHON_TRIPLE_QUOTES_MACRO:
