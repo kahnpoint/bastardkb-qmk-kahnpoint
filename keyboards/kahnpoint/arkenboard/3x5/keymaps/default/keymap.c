@@ -243,9 +243,9 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 // layer 0 - letters - quoik;
 #define LAYOUT_LAYER_BASE \
-    KC_Q,    KC_U,    KC_O,    KC_I,    KC_K,      KC_J,    KC_T,      KC_H,      KC_S,   KC_P,   \
-    KC_Y,    KC_A,    KC_E, KC_BTN1,    KC_G,      KC_F,  KC_SPC,  KC_ENTER,      KC_L,   KC_W,   \
-    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_M,    KC_R,      KC_N,      KC_D,   KC_ESC, \
+    KC_Q,    KC_U,    KC_O,    KC_I,    KC_W,      KC_J,    KC_T,      KC_H,      KC_S,   KC_P,   \
+    KC_Y,    KC_A,    KC_E, KC_BTN1,    KC_G,      KC_F,  KC_SPC,  KC_ENTER,      KC_L,   KC_K,   \
+    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_M,    KC_N,      KC_R,      KC_D,   KC_ESC, \
     ________________DEAD_FUNCTIONS___________________
 
 //layer left.1 - numbers
