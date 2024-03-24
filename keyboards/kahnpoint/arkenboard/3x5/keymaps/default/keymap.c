@@ -148,37 +148,43 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 
 /** Convenience row shorthands. */
+#define _______ KC_NO
+#define XXXXXXX KC_NO
 
 // 3 wide
-#define ___________SINGLE_QUOTES__________ KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE
 #define ___________DELETE_MACROS__________ CTRL_BACKSPACE_MACRO, KC_BACKSPACE, KC_DELETE
 #define ___________BROWSER_CONTROLS_______  KC_WWW_SEARCH, KC_WWW_BACK, KC_WWW_FORWARD
 #define ___________JS_MACROS______________ JS_DOC_MULTILINE_COMMENT_MACRO, JS_COMMENT_MACRO, JS_GRAVE_OBJECT_MACRO
+//#define ___________QUOTE_MACROS___________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO
+//#define ___________SINGLE_QUOTES__________ KC_GRAVE, KC_QUOTE, KC_DOUBLE_QUOTE
+#define ___________SINGLE_QUOTES__________ KC_DOUBLE_QUOTE, KC_QUOTE, KC_GRAVE
+#define ___________QUOTE_MACROS___________ DOUBLE_QUOTES_MACRO, SINGLE_QUOTES_MACRO, BACKTICKS_MACRO
+
 
 // 4 wide
-#define ______________BROWSER_CONTROLS____________  KC_WWW_BACK,    KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
+#define ______________BROWSER_CONTROLS____________    KC_WWW_BACK,  KC_WWW_FORWARD, KC_WWW_SEARCH, KC_WWW_REFRESH
 //#define ______________APPLICATIONS________________   KC_CALCULATOR,  KC_MY_COMPUTER, KC_CONTROL_PANEL, KC_ASSISTANT
 #define ______________WINDOW_SNAPPING_____________   WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_UP_MACRO, WIN_RIGHT_MACRO
 #define ______________PAGE_NAVIGATION_____________   KC_PGDN,  KC_MS_WH_DOWN, KC_MS_WH_UP,  KC_PGUP
-#define ______________LEFT_BRACKETS_______________   KC_LEFT_BRACKET, KC_LEFT_CURLY_BRACE,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET
-#define ______________RIGHT_BRACKETS______________   KC_RIGHT_BRACKET, KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET
-#define ______________BRACKET_MACROS______________   SQUARE_BRACKETS_MACRO, CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO
+#define ______________LEFT_BRACKETS_______________   KC_LEFT_CURLY_BRACE,  KC_LEFT_PAREN,  KC_LEFT_ANGLE_BRACKET, KC_LEFT_BRACKET
+#define ______________RIGHT_BRACKETS______________   KC_RIGHT_CURLY_BRACE,  KC_RIGHT_PAREN,  KC_RIGHT_ANGLE_BRACKET, KC_RIGHT_BRACKET
+#define ______________BRACKET_MACROS______________   CURLY_BRACKETS_MACRO,  PARENTHESIS_BRACKETS_MACRO,  ANGLE_BRACKETS_MACRO, SQUARE_BRACKETS_MACRO
 #define ______________ARROW_KEYS__________________   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
 #define ______________ALT_TAB_MACROS______________   SHIFT_TAB_MACRO, KC_LEFT_ALT, KC_TAB, ALT_TAB_MACRO
-#define ______________TAB_SWITCHING_MACROS________   CTRL_PGUP_MACRO, CTRL_SHIFT_TAB_MACRO, CTRL_TAB_MACRO, CTRL_PGDOWN_MACRO
-#define ______________QUOTE_MACROS________________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
+#define ______________TAB_SWITCHING_MACROS________   CTRL_PGDOWN_MACRO, CTRL_PGUP_MACRO, CTRL_SHIFT_TAB_MACRO, CTRL_TAB_MACRO
+//#define ______________QUOTE_MACROS________________ BACKTICKS_MACRO, SINGLE_QUOTES_MACRO, DOUBLE_QUOTES_MACRO, PYTHON_TRIPLE_QUOTES_MACRO
 
 // 5 wide
 #define ________________DEAD_HALF_ROW____________________   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 #define ________________DEAD_FUNCTIONS___________________   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 #define ________________TRNS_HALF_ROW____________________   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 #define ________________SETTINGS_CONTROLS________________   CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_BRIGHTNESS_UP, KC_BRIGHTNESS_DOWN
-#define ________________AUDIO_CONTROLS___________________   KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, KC_MEDIA_NEXT_TRACK
+#define ________________AUDIO_CONTROLS___________________   KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK
 
 // 10 wide
 #define ______________________________________________NUMBER_ROW_________________________________________________   KC_0, KC_1,    KC_2,    KC_3,    KC_4,           KC_5,  KC_6,    KC_7,    KC_8,    KC_9
 #define ______________________________________________FUNCTION_ROW_______________________________________________   KC_F10, KC_F1,   KC_F2,   KC_F3,   KC_F4,         KC_F5, KC_F6,   KC_F7,   KC_F8,   KC_F9
-#define ______________________________________________NUMBER_SYMBOLS_____________________________________________   KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR, KC_PERCENT,          KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK, KC_UNDERSCORE,   KC_PIPE
+#define ______________________________________________NUMBER_SYMBOLS_____________________________________________   KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,      KC_PERCENT,  KC_CIRCUMFLEX, KC_AMPERSAND, KC_ASTERISK,
 #define ______________________________________________DEAD_FULL_ROW______________________________________________   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 #define ______________________________________________TRNS_FULL_ROW______________________________________________   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
 
@@ -190,20 +196,15 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 
 // layer 0 - letters - qwerty;
+/*
 #define LAYOUT_LAYER_BASE \
        KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,     KC_P,         \
        KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,     KC_SEMICOLON, \
        KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_SPC,  KC_BTN1,  KC_ESC,       \
        ________________DEAD_FUNCTIONS___________________
 
-/*
-// layer 0 - letters - quoik;
-#define LAYOUT_LAYER_BASE                                                                           \
-       KC_Q,    KC_U,    KC_O,    KC_I,     KC_K,      KC_J,   KC_T,     KC_H,      KC_S,   KC_P,   \
-       KC_Y,    KC_A,    KC_E,    KC_BTN1,  KC_G,      KC_H,   KC_SPC,   KC_ENTER,  KC_L,   KC_W,   \
-       KC_Z,    KC_X,    KC_C,    KC_V,     KC_B,      KC_M,   KC_R,     KC_N,      KC_D,   KC_ESC, \
-                        ________________DEAD_FUNCTIONS___________________
-*/
+
+
 
 
 
@@ -235,12 +236,59 @@ static uint16_t auto_pointer_layer_timer = 0;
     ______________BRACKET_MACROS______________, KC_MY_COMPUTER,        ___________JS_MACROS______________, _______,  KC_ESC,   \
     ________________DEAD_FUNCTIONS___________________
 
+*/
+
+
+
+
+// layer 0 - letters - quoik;
+#define LAYOUT_LAYER_BASE \
+    KC_Q,    KC_U,    KC_O,    KC_I,    KC_K,      KC_J,    KC_T,      KC_H,      KC_S,   KC_P,   \
+    KC_Y,    KC_A,    KC_E, KC_BTN1,    KC_G,      KC_F,  KC_SPC,  KC_ENTER,      KC_L,   KC_W,   \
+    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_M,    KC_R,      KC_N,      KC_D,   KC_ESC, \
+    ________________DEAD_FUNCTIONS___________________
+
+//layer left.1 - numbers
+#define LAYOUT_LAYER_NUMBERS_AND_ARROWS \
+    KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,           KC_PERCENT,  KC_MS_WH_DOWN, KC_UP, KC_MS_WH_UP, KC_SEMICOLON,  \
+    KC_AMPERSAND,  KC_BACKSPACE, KC_DELETE,  KC_BTN2, KC_BTN3,    KC_CIRCUMFLEX, KC_LEFT, KC_DOWN, KC_RGHT,  KC_COLON,          \
+    KC_PIPE, ______________LEFT_BRACKETS_______________,          KC_BACKSLASH, ___________SINGLE_QUOTES__________,  KC_SLASH,   \
+    ________________DEAD_FUNCTIONS___________________
+
+//layer left.2 - navigation/media
+#define LAYOUT_LAYER_MEDIA_AND_ARROWS \
+    ______________TAB_SWITCHING_MACROS________,  JS_GRAVE_OBJECT_MACRO,            KC_INSERT,  KC_PGDN,  WIN_UP_MACRO, KC_PGUP,  _______,   \
+    ______________ALT_TAB_MACROS______________,  WIN_TAB_MACRO,      KC_HOME, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  _______,  \
+    _______,  ______________RIGHT_BRACKETS______________,            KC_END, PYTHON_TRIPLE_QUOTES_MACRO,  _______,  _______,  _______,          \
+    ________________DEAD_FUNCTIONS___________________
+
+//layer right.1 - symbols
+#define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
+    ______________________________________________NUMBER_ROW_________________________________________________,         \
+    KC_TILDE,  KC_UNDERSCORE,   KC_EQUAL,   KC_MINUS, KC_PLUS,     KC_ASTERISK,  KC_TAB, KC_COMMA, KC_DOT, DOUBLE_COLON_MACRO, \
+    PIPE_MACRO, ______________BRACKET_MACROS______________,        DOUBLE_BACKSLASH_MACRO, ___________QUOTE_MACROS___________, JS_COMMENT_MACRO,   \
+    ________________DEAD_FUNCTIONS___________________
+
+//layer right.2 - macros
+#define LAYOUT_LAYER_MACROS_AND_FUNCTIONS_AND_DELETE \
+    ______________________________________________FUNCTION_ROW_______________________________________________,  \
+    KC_F11, ______________BROWSER_CONTROLS____________,                              ________________AUDIO_CONTROLS___________________,  \
+    KC_F12, CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_CALCULATOR,         KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______, JS_DOC_MULTILINE_COMMENT_MACRO,   \
+    ________________DEAD_FUNCTIONS___________________
+
+
 
 
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case PIPE_MACRO:
+      if (record->event.pressed) {
+        // when keycode PIPE_MACRO is pressed
+        SEND_STRING("||" SS_TAP(X_LEFT));
+      }
+      break;
     case CURLY_BRACKETS_MACRO:
       if (record->event.pressed) {
         // when keycode CURLY_BRACKETS_MACRO is pressed
@@ -305,6 +353,12 @@ case TURBOFISH_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_COMMENT_MACRO is pressed
                 SEND_STRING("// ");
+            }
+            break;
+    case DOUBLE_BACKSLASH_MACRO:
+            if (record->event.pressed) {
+                // when keycode DOUBLE_BACKSLASH_MACRO is pressed
+                SEND_STRING("\\\\");
             }
             break;
     case JS_DOC_MULTILINE_COMMENT_MACRO:
