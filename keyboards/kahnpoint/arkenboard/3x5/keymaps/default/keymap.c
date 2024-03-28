@@ -252,28 +252,28 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define LAYOUT_LAYER_NUMBERS_AND_ARROWS \
     KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,           KC_PERCENT,  KC_MS_WH_DOWN, KC_UP, KC_MS_WH_UP, KC_SEMICOLON,  \
     KC_AMPERSAND,  KC_BACKSPACE, KC_DELETE,  KC_BTN2, KC_BTN3,    KC_CIRCUMFLEX, KC_LEFT, KC_DOWN, KC_RGHT,  KC_COLON,          \
-    KC_PIPE, ______________LEFT_BRACKETS_______________,          KC_BACKSLASH, ___________SINGLE_QUOTES__________,  KC_SLASH,   \
+    KC_PIPE, ______________LEFT_BRACKETS_______________,          KC_SLASH, ___________SINGLE_QUOTES__________,  KC_BACKSLASH,   \
     ________________DEAD_FUNCTIONS___________________
 
 //layer left.2 - navigation/media
 #define LAYOUT_LAYER_MEDIA_AND_ARROWS \
-    ______________TAB_SWITCHING_MACROS________,  JS_GRAVE_OBJECT_MACRO,            KC_INSERT,  KC_PGDN,  WIN_UP_MACRO, KC_PGUP,  _______,   \
-    ______________ALT_TAB_MACROS______________,  WIN_TAB_MACRO,      KC_HOME, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  _______,  \
-    _______,  ______________RIGHT_BRACKETS______________,            KC_END, PYTHON_TRIPLE_QUOTES_MACRO,  _______,  _______,  _______,          \
+    ______________TAB_SWITCHING_MACROS________, _______,                   JS_GRAVE_OBJECT_MACRO, KC_PGDN,  WIN_UP_MACRO, KC_PGUP,  _______,   \
+    WIN_TAB_MACRO, ______________ALT_TAB_MACROS______________,             JS_ANONYMOUS_FUNCTION_MACRO, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  ALT_F4_MACRO,  \
+    _______,  ______________RIGHT_BRACKETS______________,                  JS_IMPORT_MACRO, PYTHON_TRIPLE_QUOTES_MACRO,  KC_END,  KC_HOME,  KC_INSERT,          \
     ________________DEAD_FUNCTIONS___________________
 
 //layer right.1 - symbols
 #define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
     ______________________________________________NUMBER_ROW_________________________________________________,         \
     KC_TILDE,  KC_UNDERSCORE,   KC_EQUAL,   KC_MINUS, KC_PLUS,     KC_ASTERISK,  KC_TAB, KC_COMMA, KC_DOT, DOUBLE_COLON_MACRO, \
-    PIPE_MACRO, ______________BRACKET_MACROS______________,        DOUBLE_BACKSLASH_MACRO, ___________QUOTE_MACROS___________, JS_COMMENT_MACRO,   \
+    PIPE_MACRO, ______________BRACKET_MACROS______________,        JS_COMMENT_MACRO, ___________QUOTE_MACROS___________, DOUBLE_BACKSLASH_MACRO,  \
     ________________DEAD_FUNCTIONS___________________
 
 //layer right.2 - macros
 #define LAYOUT_LAYER_MACROS_AND_FUNCTIONS_AND_DELETE \
     ______________________________________________FUNCTION_ROW_______________________________________________,  \
     KC_F11, ______________BROWSER_CONTROLS____________,                              ________________AUDIO_CONTROLS___________________,  \
-    KC_F12, CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_CALCULATOR,         KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______, JS_DOC_MULTILINE_COMMENT_MACRO,   \
+    KC_F12, CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_CALCULATOR,         JS_DOC_MULTILINE_COMMENT_MACRO, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______,   \
     ________________DEAD_FUNCTIONS___________________
 
 
@@ -287,6 +287,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         // when keycode PIPE_MACRO is pressed
         SEND_STRING("||" SS_TAP(X_LEFT));
+      }
+      break;
+    case ALT_F4_MACRO:
+      if (record->event.pressed) {
+        // when keycode ALT_F4_MACRO is pressed
+        SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_UP(X_LALT));
       }
       break;
     case CURLY_BRACKETS_MACRO:
@@ -352,7 +358,19 @@ case TURBOFISH_MACRO:
     case JS_COMMENT_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_COMMENT_MACRO is pressed
-                SEND_STRING("// ");
+                SEND_STRING("//");
+            }
+            break;
+    case JS_ANONYMOUS_FUNCTION_MACRO:
+            if (record->event.pressed) {
+                // when keycode JS_ANONYMOUS_FUNCTION_MACRO is pressed
+                SEND_STRING("() => {}" SS_TAP(X_LEFT));
+            }
+            break;
+    case JS_IMPORT_MACRO:
+            if (record->event.pressed) {
+                // when keycode JS_IMPORT_MACRO is pressed
+                SEND_STRING("import {} from ''" SS_TAP(X_LEFT));
             }
             break;
     case DOUBLE_BACKSLASH_MACRO:
@@ -364,8 +382,8 @@ case TURBOFISH_MACRO:
     case JS_DOC_MULTILINE_COMMENT_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_DOC_MULTILINE_COMMENT_MACRO is pressed
-                //create the string, go back 3 and hit enter;
-                SEND_STRING("/**  */" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER));
+                //create the string, go back 2 and hit enter;
+                SEND_STRING("/***/" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER) SS_TAP(X_ENTER) SS_TAP(X_UP));
             }
             break;
     case JS_GRAVE_OBJECT_MACRO:
@@ -720,13 +738,13 @@ int MEDIUM_CPI = 1000;
 int LOW_CPI = 400;
 
 //example: handle_special_key_press(&localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
-void handle_special_key_press(uint8_t value, bool* status, enum qk_keycode_defines keycode) {
+void handle_special_key_press(uint8_t key_value, uint8_t rest_value, bool* status, enum qk_keycode_defines keycode) {
 
-    if((value == 1) && !(*status)){
+    if(((key_value == 1) && !(*status)) && (rest_value == 0)){
         register_code(keycode);
         *status = true;
     }
-    else if((value == 0) && *status){
+    else if((((key_value == 0) && *status) || (rest_value == 1))){
         unregister_code(keycode);
         *status = false;
     }
@@ -744,17 +762,20 @@ void set_dragscroll_and_sniping(bool dragscroll, bool sniping){
 
 bool handle_touch_layers_and_keys(void){
     //check the local first for shift;
-    handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
+    //handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
     //handle_special_key_press(localHalfTouched[0], &CTRL_PRESSED, KC_LCTL);
 
     //check the remote first for ctrl;
-    handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
+    //handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
     //handle_special_key_press(remoteHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
 
 
-    // make sure the rest is not pressed;
-    //bool localIsNotRest = (localHalfTouched[1] != 1);
-    //bool remoteIsNotRest = (remoteHalfTouched[1] != 1);
+    //handle_special_key_press(localHalfTouched[0], localHalfTouched[1], &SHIFT_PRESSED, KC_LSFT) ;
+    //handle_special_key_press(remoteHalfTouched[0], remoteHalfTouched[1], &CTRL_PRESSED, KC_LCTL) ;
+
+    handle_special_key_press(localHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
+    handle_special_key_press(remoteHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
+
 
     // check the middle 2 for layer shifts;
     // there is one extra unused pin;
@@ -781,10 +802,10 @@ bool handle_touch_layers_and_keys(void){
 
 
     //check the local last for alt;
-    handle_special_key_press(localHalfTouched[NUM_PINS - 1], &ALT_PRESSED, KC_LALT) ;
+    handle_special_key_press(localHalfTouched[NUM_PINS - 1], 0, &ALT_PRESSED, KC_LALT) ;
 
     //check the remote last for win;
-    handle_special_key_press(remoteHalfTouched[NUM_PINS - 1], &WIN_PRESSED, KC_LGUI) ;
+    handle_special_key_press(remoteHalfTouched[NUM_PINS - 1], 0, &WIN_PRESSED, KC_LGUI) ;
 
 
     return false;
