@@ -383,7 +383,7 @@ case TURBOFISH_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_DOC_MULTILINE_COMMENT_MACRO is pressed
                 //create the string, go back 2 and hit enter;
-                SEND_STRING("/***/" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER) SS_TAP(X_ENTER) SS_TAP(X_UP));
+                SEND_STRING("/***/" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER));
             }
             break;
     case JS_GRAVE_OBJECT_MACRO:
