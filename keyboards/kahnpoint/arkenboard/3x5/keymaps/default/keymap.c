@@ -773,11 +773,11 @@ bool handle_touch_layers_and_keys(void){
     //handle_special_key_press(localHalfTouched[0], localHalfTouched[1], &SHIFT_PRESSED, KC_LSFT) ;
     //handle_special_key_press(remoteHalfTouched[0], remoteHalfTouched[1], &CTRL_PRESSED, KC_LCTL) ;
 
-    //handle_special_key_press(localHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
-    //handle_special_key_press(remoteHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
+    handle_special_key_press(localHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
+    handle_special_key_press(remoteHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
 
-    handle_special_key_press(localHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
-    handle_special_key_press(remoteHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
+    //handle_special_key_press(localHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
+    //handle_special_key_press(remoteHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
 
 
 
