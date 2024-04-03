@@ -383,7 +383,7 @@ case TURBOFISH_MACRO:
             if (record->event.pressed) {
                 // when keycode JS_DOC_MULTILINE_COMMENT_MACRO is pressed
                 //create the string, go back 2 and hit enter;
-                SEND_STRING("/***/" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER));
+                SEND_STRING("/***/" SS_TAP(X_LEFT) SS_TAP(X_LEFT) SS_TAP(X_ENTER) );
             }
             break;
     case JS_GRAVE_OBJECT_MACRO:
@@ -765,7 +765,7 @@ bool handle_touch_layers_and_keys(void){
     //handle_special_key_press(localHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
     //handle_special_key_press(localHalfTouched[0], &CTRL_PRESSED, KC_LCTL);
 
-    //check the remote first for ctrl;
+    //check the remote first for ctrl
     //handle_special_key_press(remoteHalfTouched[0], &CTRL_PRESSED, KC_LCTL) ;
     //handle_special_key_press(remoteHalfTouched[0], &SHIFT_PRESSED, KC_LSFT) ;
 
@@ -773,32 +773,42 @@ bool handle_touch_layers_and_keys(void){
     //handle_special_key_press(localHalfTouched[0], localHalfTouched[1], &SHIFT_PRESSED, KC_LSFT) ;
     //handle_special_key_press(remoteHalfTouched[0], remoteHalfTouched[1], &CTRL_PRESSED, KC_LCTL) ;
 
-    handle_special_key_press(localHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
-    handle_special_key_press(remoteHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
+    //handle_special_key_press(localHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
+    //handle_special_key_press(remoteHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
+
+    handle_special_key_press(localHalfTouched[0], 0, &CTRL_PRESSED, KC_LCTL) ;
+    handle_special_key_press(remoteHalfTouched[0], 0, &SHIFT_PRESSED, KC_LSFT) ;
 
 
-    // check the middle 2 for layer shifts;
+
+
+    // check the middle 2 for layer shifts
     // there is one extra unused pin;
-    int LAYER_START_PIN = 1;
+    int LAYER_START_PIN = 2;
+    int LAYER_PRESSED = 0;
     for(uint8_t i = LAYER_START_PIN; i < LAYER_START_PIN + 2; i++) {
         if ((remoteHalfTouched[i] == 1)) {
             disable_all_layers_except((2 * (i-LAYER_START_PIN) + 1));
             //kc_register_code(SNIPING);
             set_dragscroll_and_sniping(true, true);
             //pointing_device_set_cpi(LOW_CPI)
-            return true;
+            LAYER_PRESSED = 1;
+            //break;
         } else if ((localHalfTouched[i] == 1)) {
             disable_all_layers_except((2 * (i-LAYER_START_PIN)) + 2);
             //kc_register_code(SNIPING);
             set_dragscroll_and_sniping(true, true);
             //pointing_device_set_cpi(HIGH_CPI);
-            return true;
+            LAYER_PRESSED = 1;
+            //break;
         }
     }
-
-    disable_all_layers();
-    //kc_unregister_code(SNIPING);
-    set_dragscroll_and_sniping(false, false);
+    if (LAYER_PRESSED == 0){
+        disable_all_layers();
+        //kc_unregister_code(SNIPING);
+        set_dragscroll_and_sniping(false, false);
+        //pointing_device_set_cpi(MEDIUM_CPI);
+    }
 
 
     //check the local last for alt;
