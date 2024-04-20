@@ -239,7 +239,6 @@ static uint16_t auto_pointer_layer_timer = 0;
 */
 
 
-// qmk flash -kb kahnpoint/arkenboard/3x5/v2/splinky_3 -km default
 
 
 // layer 0 - letters - quoik;
@@ -251,36 +250,35 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 //layer left.1 - symbols
 #define LAYOUT_LAYER_NUMBERS_AND_ARROWS \
-    KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,                   KC_PERCENT,  KC_MS_WH_DOWN, KC_UP, KC_MS_WH_UP, _______,  \
+    KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,                   KC_PERCENT,  KC_MS_WH_UP, KC_UP, KC_MS_WH_DOWN, _______,  \
     KC_AMPERSAND,  KC_BACKSPACE, KC_DELETE,  KC_BTN2, KC_CIRCUMFLEX,      KC_ASTERISK, KC_LEFT, KC_DOWN, KC_RGHT,  KC_COLON,          \
-    KC_PIPE, ______________LEFT_BRACKETS_______________,                  KC_SLASH,  ___________SINGLE_QUOTES__________,  KC_BACKSLASH,   \
+    KC_PIPE, ______________LEFT_BRACKETS_______________,                  KC_SLASH, KC_PGUP, KC_HOME, KC_PGDN, KC_END,    \
     ________________DEAD_FUNCTIONS___________________
 
+//KC_END,  KC_HOME,
 //layer left.2 - macros
 #define LAYOUT_LAYER_MEDIA_AND_ARROWS \
-    ______________TAB_SWITCHING_MACROS________, JS_GRAVE_OBJECT_MACRO,        DOUBLE_PERCENT_MACRO, KC_PGDN,  WIN_UP_MACRO, KC_PGUP,  ALT_F4_MACRO,   \
-    ______________ALT_TAB_MACROS______________, WIN_TAB_MACRO,                DOUBLE_ASTERISK_MACRO, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  DOUBLE_COLON_MACRO,  \
-    PIPE_MACRO,  ______________BRACKET_MACROS______________,                  JS_COMMENT_MACRO, ___________QUOTE_MACROS___________,  DOUBLE_BACKSLASH_MACRO,          \
+    ______________TAB_SWITCHING_MACROS________, JS_GRAVE_OBJECT_MACRO,       DOUBLE_PERCENT_MACRO, KC_PGUP,  WIN_UP_MACRO, KC_PGDN,  ALT_F4_MACRO,   \
+    DOUBLE_AMPERSAND_MACRO, ______________ALT_TAB_MACROS______________,      DOUBLE_ASTERISK_MACRO, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  DOUBLE_COLON_MACRO,  \
+    PIPE_MACRO,  ______________BRACKET_MACROS______________,                 JS_COMMENT_MACRO, ___________QUOTE_MACROS___________,  DOUBLE_BACKSLASH_MACRO,          \
     ________________DEAD_FUNCTIONS___________________
 
-//, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______,
-
+//,PYTHON_TRIPLE_QUOTES_MACRO, ,,
+//, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______,''''''````""""
 
 //layer right.1 - numbers
 #define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
     ______________________________________________NUMBER_ROW_________________________________________________,         \
-    KC_MINUS,  KC_UNDERSCORE,   KC_EQUAL, KC_BTN3, KC_TILDE,                  JS_ANONYMOUS_FUNCTION_MACRO,  KC_TAB, KC_COMMA, KC_DOT, KC_SEMICOLON, \
-    KC_PLUS, ______________RIGHT_BRACKETS______________,                    JS_DOC_MULTILINE_COMMENT_MACRO,  KC_END, KC_HOME, KC_INSERT , _______,  \
+    KC_PLUS,  KC_MINUS, KC_EQUAL, KC_BTN3, KC_UNDERSCORE,                _______,  KC_TAB, KC_COMMA, KC_DOT, KC_SEMICOLON, \
+    KC_TILDE, ______________RIGHT_BRACKETS______________,                _______, ___________SINGLE_QUOTES__________,  KC_BACKSLASH,  \
     ________________DEAD_FUNCTIONS___________________
-
-
 
 
 //layer right.2 - functions
 #define LAYOUT_LAYER_MACROS_AND_FUNCTIONS_AND_DELETE \
     ______________________________________________FUNCTION_ROW_______________________________________________,  \
     KC_F11, ______________BROWSER_CONTROLS____________,                         ________________AUDIO_CONTROLS___________________,    \
-    KC_F12, CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_CALCULATOR,    _______,   _______,   _______,   _______,   _______,  \
+    KC_F12, CTRL_ALT_DEL_MACRO, KC_PRINT_SCREEN, EMOJI_MACRO, KC_CALCULATOR,    JS_DOC_MULTILINE_COMMENT_MACRO,   _______,   _______,   _______,   _______,  \
     ________________DEAD_FUNCTIONS___________________
 
 
@@ -498,14 +496,8 @@ case TURBOFISH_MACRO:
     case DOUBLE_ASTERISK_MACRO:
     if (record->event.pressed) {
         // when keycode DOUBLE_ASTERISK_MACRO is pressed
-        SEND_STRING("**");
+        SEND_STRING("**" SS_TAP(X_LEFT));
     }
-    break;
-    //case DOUBLE_BACKSLASH_MACRO:
-    //if (record->event.pressed) {
-    //    // when keycode DOUBLE_BACKSLASH_MACRO is pressed
-    //    SEND_STRING("\\\\");
-    //}
     break;
     case DOUBLE_AMPERSAND_MACRO:
     if (record->event.pressed) {
@@ -518,6 +510,7 @@ case TURBOFISH_MACRO:
         // when keycode DOUBLE_PERCENT_MACRO is pressed
         SEND_STRING("%%");
     }
+    break;
 
   }
 
