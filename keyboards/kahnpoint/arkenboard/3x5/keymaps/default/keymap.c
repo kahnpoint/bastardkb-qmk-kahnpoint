@@ -250,27 +250,27 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 //layer left.1 - symbols
 #define LAYOUT_LAYER_NUMBERS_AND_ARROWS \
-    KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,                   KC_PERCENT,  KC_MS_WH_UP, KC_UP, KC_MS_WH_DOWN, _______,  \
+    KC_QUESTION, KC_EXCLAIM, KC_AT, KC_HASH, KC_DOLLAR,                   KC_PERCENT,  KC_MS_WH_DOWN, KC_UP, KC_MS_WH_UP, KC_SEMICOLON,  \
     KC_AMPERSAND,  KC_BACKSPACE, KC_DELETE,  KC_BTN2, KC_CIRCUMFLEX,      KC_ASTERISK, KC_LEFT, KC_DOWN, KC_RGHT,  KC_COLON,          \
-    KC_PIPE, ______________LEFT_BRACKETS_______________,                  KC_SLASH, KC_PGUP, KC_HOME, KC_PGDN, KC_END,    \
+    KC_PIPE, ______________LEFT_BRACKETS_______________,                  KC_SLASH, ___________SINGLE_QUOTES__________,  KC_BACKSLASH,    \
     ________________DEAD_FUNCTIONS___________________
 
-//KC_END,  KC_HOME,
+//KC_END,  KC_HOME, KC_PGUP, KC_HOME, KC_PGDN, KC_END,
 //layer left.2 - macros
 #define LAYOUT_LAYER_MEDIA_AND_ARROWS \
-    ______________TAB_SWITCHING_MACROS________, JS_GRAVE_OBJECT_MACRO,       DOUBLE_PERCENT_MACRO, KC_PGUP,  WIN_UP_MACRO, KC_PGDN,  ALT_F4_MACRO,   \
-    DOUBLE_AMPERSAND_MACRO, ______________ALT_TAB_MACROS______________,      DOUBLE_ASTERISK_MACRO, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  DOUBLE_COLON_MACRO,  \
-    PIPE_MACRO,  ______________BRACKET_MACROS______________,                 JS_COMMENT_MACRO, ___________QUOTE_MACROS___________,  DOUBLE_BACKSLASH_MACRO,          \
+    _______, ______________TAB_SWITCHING_MACROS________,                  _______, KC_PGDN,  WIN_UP_MACRO, KC_PGUP,  ALT_F4_MACRO,   \
+    _______, ______________ALT_TAB_MACROS______________,                  _______, WIN_LEFT_MACRO, WIN_DOWN_MACRO, WIN_RIGHT_MACRO,  WIN_TAB_MACRO,  \
+    _______,  ______________RIGHT_BRACKETS______________,                 _______, KC_HOME, KC_INSERT, KC_END,  _______,          \
     ________________DEAD_FUNCTIONS___________________
 
 //,PYTHON_TRIPLE_QUOTES_MACRO, ,,
-//, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______,''''''````""""
+//, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, _______, _______,''''''````""""nnnnnnNNnNN""""""""NnnN"""""""`'`'`'`'`'`'`'\\\\\\\\\\\\\\\'`'`'`'`'`'`'`"""""""
 
 //layer right.1 - numbers
 #define LAYOUT_LAYER_SYMBOLS_AND_DELETE \
     ______________________________________________NUMBER_ROW_________________________________________________,         \
-    KC_PLUS,  KC_MINUS, KC_EQUAL, KC_BTN3, KC_UNDERSCORE,                _______,  KC_TAB, KC_COMMA, KC_DOT, KC_SEMICOLON, \
-    KC_TILDE, ______________RIGHT_BRACKETS______________,                _______, ___________SINGLE_QUOTES__________,  KC_BACKSLASH,  \
+    KC_PLUS,  KC_MINUS, KC_EQUAL, KC_BTN3, KC_TILDE,                   KC_UNDERSCORE,  KC_TAB, KC_COMMA, KC_DOT, DOUBLE_COLON_MACRO, \
+    PIPE_MACRO, ______________BRACKET_MACROS______________,            JS_COMMENT_MACRO,  ___________QUOTE_MACROS___________, DOUBLE_BACKSLASH_MACRO, \
     ________________DEAD_FUNCTIONS___________________
 
 
